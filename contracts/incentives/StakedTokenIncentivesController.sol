@@ -11,8 +11,8 @@ import {IStakedTokenWithConfig} from '../interfaces/IStakedTokenWithConfig.sol';
  * @title StakedTokenIncentivesController
  * @notice Distributor contract for rewards to the protocol, using a staked token as rewards asset.
  * The contract stakes the rewards before redistributing them to the protocol participants.
- * The reference staked token implementation is at https://github.com/horizonx-tech/oasyslend-stake
- * @author Horizonx.tech
+ * The reference staked token implementation is at https://github.com/palmy-finance/palmy-stake
+ * @author Palmy finance
  **/
 contract StakedTokenIncentivesController is BaseIncentivesController {
   using SafeERC20 for IERC20;

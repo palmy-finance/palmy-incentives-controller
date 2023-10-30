@@ -1,6 +1,6 @@
 import { task } from 'hardhat/config';
 import {
-  OasysLendProtocolDataProvider__factory,
+  PalmyProtocolDataProvider__factory,
   ILendingPoolAddressesProvider__factory,
 } from '../../types';
 
@@ -23,7 +23,7 @@ task(
 
     // Instances
     const poolProvider = await ILendingPoolAddressesProvider__factory.connect(provider, deployer);
-    const protocolDataProvider = await OasysLendProtocolDataProvider__factory.connect(
+    const protocolDataProvider = await PalmyProtocolDataProvider__factory.connect(
       await poolProvider.getAddress(
         '0x0100000000000000000000000000000000000000000000000000000000000000'
       ),

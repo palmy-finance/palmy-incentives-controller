@@ -1,7 +1,7 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { tEthereumAddress } from '../helpers/types';
 import {
-  OasyslendProtocolDataProvider__factory,
+  PalmyProtocolDataProvider__factory,
   LToken__factory,
   IERC20__factory,
   ILendingPoolAddressesProvider__factory,
@@ -61,7 +61,7 @@ export const getReserveConfigs = async (
     poolProviderAddress,
     proposer
   );
-  const protocolDataProvider = await OasyslendProtocolDataProvider__factory.connect(
+  const protocolDataProvider = await PalmyProtocolDataProvider__factory.connect(
     await poolProvider.getAddress(
       '0x0100000000000000000000000000000000000000000000000000000000000000'
     ),

@@ -13,7 +13,7 @@ export enum eContractid {
   IERC20Detailed = 'IERC20Detailed',
   StakedTokenIncentivesController = 'StakedTokenIncentivesController',
   MockSelfDestruct = 'MockSelfDestruct',
-  StakedOasysLendV2 = 'StakedOasysLendV2',
+  StakedPalmyV2 = 'StakedPalmyV2',
   PullRewardsIncentivesController = 'PullRewardsIncentivesController',
 }
 
@@ -71,7 +71,7 @@ export interface iAssetBase<T> {
 }
 
 export interface incentivesConfig {
-  oasyslendToken: tEthereumAddress;
+  palmyToken: tEthereumAddress;
   poolConfigurator: tEthereumAddress;
   addressProvider: tEthereumAddress;
   lendingPool: tEthereumAddress;

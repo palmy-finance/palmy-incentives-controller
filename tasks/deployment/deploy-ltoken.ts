@@ -59,7 +59,7 @@ task('deploy-ltoken', 'Deploy LToken using prior reserve config')
       //   tokenSymbol,
       //   incentivesController
       // );
-      // TODO: follow oasyslend-protocol's LToken / maybe use proxy update
+      // TODO: follow palmy-protocol's LToken / maybe use proxy update
       const { address } = await new LToken__factory(deployer).deploy();
 
       return address;

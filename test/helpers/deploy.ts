@@ -8,7 +8,7 @@ import {
 import { getFirstSigner, insertContractAddressInDb } from '../../helpers/contracts-helpers';
 import { verifyContract } from '../../helpers/etherscan-verification';
 import { eContractid, tEthereumAddress } from '../../helpers/types';
-import { MintableErc20, StakedOasysLendV2__factory } from '../../types';
+import { MintableErc20, StakedPalmyV2__factory } from '../../types';
 
 export const COOLDOWN_SECONDS = '3600'; // 1 hour in seconds
 export const UNSTAKE_WINDOW = '1800'; // 30 min in second
@@ -24,7 +24,7 @@ export const testDeployIncentivesController = async (
   const stakeProxy = await deployInitializableAdminUpgradeabilityProxy();
   const incentivesProxy = await deployInitializableAdminUpgradeabilityProxy();
 
-  const stakeV3 = await deployStakedOasysLendV2([
+  const stakeV3 = await deployStakedPalmyV2([
     token.address,
     token.address,
     COOLDOWN_SECONDS,
@@ -71,7 +71,7 @@ export const testDeployIncentivesController = async (
   return { incentivesProxy, stakeProxy };
 };
 
-export const deployStakedOasysLendV2 = async (
+export const deployStakedPalmyV2 = async (
   [
     stakedToken,
     rewardsToken,
@@ -91,7 +91,7 @@ export const deployStakedOasysLendV2 = async (
   ],
   verify?: boolean
 ) => {
-  const id = eContractid.StakedOasysLendV2;
+  const id = eContractid.StakedPalmyV2;
   const args: string[] = [
     stakedToken,
     rewardsToken,
@@ -102,7 +102,7 @@ export const deployStakedOasysLendV2 = async (
     distributionDuration,
     ZERO_ADDRESS, // gov address
   ];
-  const instance = await new StakedOasysLendV2__factory(await getFirstSigner()).deploy(
+  const instance = await new StakedPalmyV2__factory(await getFirstSigner()).deploy(
     stakedToken,
     rewardsToken,
     cooldownSeconds,

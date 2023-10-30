@@ -64,7 +64,7 @@ task('deploy-var-debt-token', 'Deploy LToken using prior reserve config')
       //   tokenSymbol,
       //   incentivesController
       // );
-      // TODO: follow OasysLend-protocol's VariableDebtToken / maybe use proxy update
+      // TODO: follow Palmy-protocol's VariableDebtToken / maybe use proxy update
       const { address } = await new VariableDebtToken__factory(deployer).deploy();
 
       return address;

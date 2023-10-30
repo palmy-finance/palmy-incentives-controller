@@ -7,7 +7,7 @@ pragma solidity 0.7.5;
  * - Used for indexing purposes of protocol's markets
  * - The id assigned to a LendingPoolAddressesProvider refers to the market it is connected with,
  *   for example with `0` for the main market and `1` for the next created
- * @author Horizonx.tech
+ * @author Palmy finance
  **/
 interface ILendingPoolAddressesProviderRegistry {
   event AddressesProviderRegistered(address indexed newAddress);

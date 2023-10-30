@@ -10,7 +10,7 @@ import {BaseIncentivesController} from './base/BaseIncentivesController.sol';
 /**
  * @title PullRewardsIncentivesController
  * @notice Distributor contract for ERC20 rewards to the protocol participants that pulls ERC20 from external account
- * @author Horizonx.tech
+ * @author Palmy finance
  **/
 contract PullRewardsIncentivesController is
   BaseIncentivesController

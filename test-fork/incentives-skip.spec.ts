@@ -16,7 +16,7 @@ import {
 } from '../helpers/misc-utils';
 import { MAX_UINT_AMOUNT, ZERO_ADDRESS } from '../helpers/constants';
 import { IERC20 } from '../types/IERC20';
-import { IOasyslendGovernanceV2 } from '../types/IOasyslendGovernanceV2';
+import { IPalmyGovernanceV2 } from '../types/IPalmyGovernanceV2';
 import { ILendingPool } from '../types/ILendingPool';
 import {
   StakedTokenIncentivesControllerFactory,
@@ -45,11 +45,11 @@ const {
   POOL_PROVIDER = '0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5',
   POOL_DATA_PROVIDER = '0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d',
   ECO_RESERVE = '0x25F2226B597E8F9514B3F68F00f494cF4f286491',
-  OASYSLEND_TOKEN = '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9',
+  PALMY_TOKEN = '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9',
   TREASURY = '0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c',
   IPFS_HASH = 'QmT9qk3CRYbFDWpDFYeAv8T8H1gnongwKhh5J68NLkLir6',
   GOVERNANCE_V2 = '0xEC568fffba86c094cf06b22134B23074DFE2252c', // mainnet
-  OASYSLEND_SHORT_EXECUTOR = '0xee56e2b3d491590b5b31738cc34d5232f378a8d5', // mainnet
+  PALMY_SHORT_EXECUTOR = '0xee56e2b3d491590b5b31738cc34d5232f378a8d5', // mainnet
 } = process.env;
 
 if (
@@ -57,10 +57,10 @@ if (
   !POOL_CONFIGURATOR ||
   !POOL_DATA_PROVIDER ||
   !ECO_RESERVE ||
-  !OASYSLEND_TOKEN ||
+  !PALMY_TOKEN ||
   !IPFS_HASH ||
   !GOVERNANCE_V2 ||
-  !OASYSLEND_SHORT_EXECUTOR ||
+  !PALMY_SHORT_EXECUTOR ||
   !TREASURY
 ) {
   throw new Error('You have not set correctly the .env file, make sure to read the README.md');
@@ -69,9 +69,9 @@ if (
 const LENDING_POOL = '0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9';
 const VOTING_DURATION = 19200;
 
-const OASYSLEND_WHALE = '0x25f2226b597e8f9514b3f68f00f494cf4f286491';
+const PALMY_WHALE = '0x25f2226b597e8f9514b3f68f00f494cf4f286491';
 
-const STAKED_OASYSLEND = '0x4da27a545c0c5B758a6BA100e3a049001de870f5';
+const STAKED_PALMY = '0x4da27a545c0c5B758a6BA100e3a049001de870f5';
 const DAI_TOKEN = '0x6b175474e89094c44da98b954eedeac495271d0f';
 const DAI_HOLDER = '0x72aabd13090af25dbb804f84de6280c697ed1150';
 
@@ -83,9 +83,9 @@ describe('Enable incentives in target assets', () => {
   let proposer: SignerWithAddress;
   let incentivesProxyAdmin: SignerWithAddress;
   let incentivesProxy: tEthereumAddress;
-  let gov: IOasyslendGovernanceV2;
+  let gov: IPalmyGovernanceV2;
   let pool: ILendingPool;
-  let oasyslendToken: IERC20;
+  let palmyToken: IERC20;
   let stakedLay: IERC20;
   let dai: IERC20;
   let lDAI: LToken;
@@ -128,7 +128,7 @@ describe('Enable incentives in target assets', () => {
 
     // Deploy incentives implementation
     const { address: incentivesImplementation } = await deployStakedTokenIncentivesController([
-      STAKED_OASYSLEND,
+      STAKED_PALMY,
     ]);
     const incentivesInitParams = StakedTokenIncentivesControllerFactory.connect(
       incentivesImplementation,
@@ -189,10 +189,10 @@ describe('Enable incentives in target assets', () => {
       true
     );
     proposalExecutionPayload = proposalExecutionPayloadAddress;
-    // Send ether to the OASYSLEND_WHALE, which is a non payable contract via selfdestruct
+    // Send ether to the PALMY_WHALE, which is a non payable contract via selfdestruct
     const selfDestructContract = await new SelfdestructTransferFactory(proposer).deploy();
     await (
-      await selfDestructContract.destroyAndTransfer(OASYSLEND_WHALE, {
+      await selfDestructContract.destroyAndTransfer(PALMY_WHALE, {
         value: ethers.utils.parseEther('1'),
       })
     ).wait();
@@ -206,27 +206,27 @@ describe('Enable incentives in target assets', () => {
     // Send ether to the Short Executor, which is a non payable contract via selfdestruct
     const selfDestructContractV3 = await new SelfdestructTransferFactory(proposer).deploy();
     await (
-      await selfDestructContractV3.destroyAndTransfer(OASYSLEND_SHORT_EXECUTOR, {
+      await selfDestructContractV3.destroyAndTransfer(PALMY_SHORT_EXECUTOR, {
         value: ethers.utils.parseEther('1'),
       })
     ).wait();
     await impersonateAccountsHardhat([
-      OASYSLEND_WHALE,
+      PALMY_WHALE,
       ...Object.keys(spendList).map((k) => spendList[k].holder),
       GOVERNANCE_V2,
-      OASYSLEND_SHORT_EXECUTOR,
+      PALMY_SHORT_EXECUTOR,
     ]);
 
     // Impersonating holders
-    whale = ethers.provider.getSigner(OASYSLEND_WHALE);
+    whale = ethers.provider.getSigner(PALMY_WHALE);
     daiHolder = ethers.provider.getSigner(DAI_HOLDER);
 
     // Initialize contracts and tokens
     gov = (await ethers.getContractAt(
-      'IOasyslendGovernanceV2',
+      'IPalmyGovernanceV2',
       GOVERNANCE_V2,
       proposer
-    )) as IOasyslendGovernanceV2;
+    )) as IPalmyGovernanceV2;
     pool = (await ethers.getContractAt('ILendingPool', LENDING_POOL, proposer)) as ILendingPool;
 
     const {
@@ -235,14 +235,14 @@ describe('Enable incentives in target assets', () => {
       variableDebtTokenAddress,
     } = await pool.getReserveData(DAI_TOKEN);
 
-    oasyslendToken = IERC20Factory.connect(OASYSLEND_TOKEN, whale);
-    stakedLay = IERC20Factory.connect(STAKED_OASYSLEND, proposer);
+    palmyToken = IERC20Factory.connect(PALMY_TOKEN, whale);
+    stakedLay = IERC20Factory.connect(STAKED_PALMY, proposer);
     dai = IERC20Factory.connect(DAI_TOKEN, daiHolder);
     lDAI = LTokenFactory.connect(lTokenAddress, proposer);
     variableDebtDAI = IERC20Factory.connect(variableDebtTokenAddress, proposer);
 
-    // Transfer enough Oasyslend to proposer
-    await (await oasyslendToken.transfer(proposer.address, parseEther('2000000'))).wait();
+    // Transfer enough Palmy to proposer
+    await (await palmyToken.transfer(proposer.address, parseEther('2000000'))).wait();
 
     // Transfer DAI to repay future DAI loan
     const lastTx = await (await dai.transfer(proposer.address, parseEther('100000'))).wait();
@@ -272,7 +272,7 @@ describe('Enable incentives in target assets', () => {
   });
 
   it('Proposal should be executed', async () => {
-    const impersonateExecutor = await ethers.provider.getSigner(OASYSLEND_SHORT_EXECUTOR);
+    const impersonateExecutor = await ethers.provider.getSigner(PALMY_SHORT_EXECUTOR);
 
     const executionPayload = ProposalIncentivesExecutorFactory.connect(
       proposalExecutionPayload,
@@ -401,12 +401,12 @@ describe('Enable incentives in target assets', () => {
   xit('User should be able to interact with LendingPool with DAI/GUSD/USDC/USDT/WBTC/WETH', async () => {
     const reserveConfigs = await getReserveConfigs(POOL_PROVIDER, RESERVES, proposer);
 
-    // Deposit Oasyslend to LendingPool to have enought collateral for future borrows
-    await (await oasyslendToken.connect(proposer).approve(pool.address, parseEther('1000'))).wait();
+    // Deposit Palmy to LendingPool to have enought collateral for future borrows
+    await (await palmyToken.connect(proposer).approve(pool.address, parseEther('1000'))).wait();
     await (
       await pool
         .connect(proposer)
-        .deposit(oasyslendToken.address, parseEther('1000'), proposer.address, 0)
+        .deposit(palmyToken.address, parseEther('1000'), proposer.address, 0)
     ).wait();
 
     for (let x = 0; x < reserveConfigs.length; x++) {

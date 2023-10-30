@@ -8,7 +8,7 @@ import {
 } from '../../helpers/constants';
 import { eNetwork } from '../../helpers/types';
 import {
-  IOasyslendRewardsVault__factory,
+  IPalmyRewardsVault__factory,
   PullRewardsIncentivesController__factory,
 } from '../../types';
 import {

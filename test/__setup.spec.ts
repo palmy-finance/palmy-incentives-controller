@@ -8,19 +8,19 @@ import { MintableErc20 } from '../types/MintableErc20';
 import { testDeployIncentivesController } from './helpers/deploy';
 import {
   PullRewardsIncentivesController__factory,
-  StakedOasysLendV2__factory,
+  StakedPalmyV2__factory,
   StakedTokenIncentivesController__factory,
 } from '../types';
 import { parseEther } from '@ethersproject/units';
 import { MAX_UINT_AMOUNT } from '../helpers/constants';
 
-const topUpWalletsWithOasyslend = async (
+const topUpWalletsWithPalmy = async (
   wallets: Signer[],
-  oasyslendToken: MintableErc20,
+  palmyToken: MintableErc20,
   amount: string
 ) => {
   for (const wallet of wallets) {
-    await waitForTx(await oasyslendToken.connect(wallet).mint(amount));
+    await waitForTx(await palmyToken.connect(wallet).mint(amount));
   }
 };
 
@@ -32,14 +32,14 @@ const buildTestEnv = async (
 ) => {
   console.time('setup');
 
-  const oasyslendToken = await deployMintableErc20(['OasysLend', 'OAL']);
+  const palmyToken = await deployMintableErc20(['Palmy', 'OAL']);
 
   await waitForTx(
-    await oasyslendToken.connect(vaultOfRewards).mint(ethers.utils.parseEther('2000000'))
+    await palmyToken.connect(vaultOfRewards).mint(ethers.utils.parseEther('2000000'))
   );
-  await topUpWalletsWithOasyslend(
+  await topUpWalletsWithPalmy(
     [restWallets[0], restWallets[1], restWallets[2], restWallets[3], restWallets[4]],
-    oasyslendToken,
+    palmyToken,
     ethers.utils.parseEther('100').toString()
   );
 
@@ -47,17 +47,17 @@ const buildTestEnv = async (
     deployer,
     vaultOfRewards,
     proxyAdmin,
-    oasyslendToken
+    palmyToken
   );
   const { proxy: baseIncentivesProxy } = await DRE.run('deploy-pull-rewards-incentives', {
     emissionManager: await deployer.getAddress(),
-    rewardToken: oasyslendToken.address,
+    rewardToken: palmyToken.address,
     rewardsVault: await vaultOfRewards.getAddress(),
     proxyAdmin: await proxyAdmin.getAddress(),
   });
 
   await waitForTx(
-    await oasyslendToken.connect(vaultOfRewards).approve(baseIncentivesProxy, MAX_UINT_AMOUNT)
+    await palmyToken.connect(vaultOfRewards).approve(baseIncentivesProxy, MAX_UINT_AMOUNT)
   );
 
   const distributionDuration = ((await getBlockTimestamp()) + 1000 * 60 * 60).toString();
@@ -79,7 +79,7 @@ const buildTestEnv = async (
   await incentivesController.setDistributionEnd(distributionDuration);
   await pullRewardsIncentivesController.setDistributionEnd(distributionDuration);
   await waitForTx(
-    await oasyslendToken
+    await palmyToken
       .connect(vaultOfRewards)
       .transfer(incentivesController.address, parseEther('1000000'))
   );
@@ -87,21 +87,21 @@ const buildTestEnv = async (
   console.timeEnd('setup');
 
   return {
-    oasyslendToken,
+    palmyToken,
     incentivesController,
     pullRewardsIncentivesController,
-    oasyslendStake: StakedOasysLendV2__factory.connect(stakeProxy.address, deployer),
+    palmyStake: StakedPalmyV2__factory.connect(stakeProxy.address, deployer),
   };
 };
 
 before(async () => {
   await rawBRE.run('set-DRE');
   const [deployer, proxyAdmin, rewardsVault, ...restWallets] = await getEthersSigners();
-  const { oasyslendToken, oasyslendStake, incentivesController, pullRewardsIncentivesController } =
+  const { palmyToken, palmyStake, incentivesController, pullRewardsIncentivesController } =
     await buildTestEnv(deployer, rewardsVault, proxyAdmin, restWallets);
   await initializeMakeSuite(
-    oasyslendToken,
-    oasyslendStake,
+    palmyToken,
+    palmyStake,
     incentivesController,
     pullRewardsIncentivesController
   );

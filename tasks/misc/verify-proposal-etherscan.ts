@@ -1,6 +1,6 @@
 import { task } from 'hardhat/config';
 import {
-  OasyslendProtocolDataProvider__factory,
+  PalmyProtocolDataProvider__factory,
   IERC20Detailed__factory,
   ILendingPool,
   ILendingPoolAddressesProvider__factory,
@@ -43,7 +43,7 @@ task('verify-proposal-etherscan', 'Verify proposals')
       POOL_PROVIDER,
       deployer
     );
-    const protocolDataProvider = await OasyslendProtocolDataProvider__factory.connect(
+    const protocolDataProvider = await PalmyProtocolDataProvider__factory.connect(
       await poolProvider.getAddress(
         '0x0100000000000000000000000000000000000000000000000000000000000000'
       ),

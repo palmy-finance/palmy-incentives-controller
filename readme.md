@@ -1,12 +1,12 @@
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
-[![Build pass](https://github.com/horizonx-tech/oasyslend-incentives-controller/actions/workflows/node.js.yml/badge.svg)](https://github.com/horizonx-tech/oasyslend-incentives-controller/actions/workflows/node.js.yml)
-[![codecov](https://codecov.io/gh/horizonx-tech/oasyslend-incentives-controller/branch/master/graph/badge.svg?token=DRFNLw506C)](https://codecov.io/gh/horizonx-tech/oasyslend-incentives-controller)
+[![Build pass](https://github.com/palmy-finance/palmy-incentives-controller/actions/workflows/node.js.yml/badge.svg)](https://github.com/palmy-finance/palmy-incentives-controller/actions/workflows/node.js.yml)
+[![codecov](https://codecov.io/gh/palmy-finance/palmy-incentives-controller/branch/master/graph/badge.svg?token=DRFNLw506C)](https://codecov.io/gh/palmy-finance/palmy-incentives-controller)
 
-# Oasyslend incentives
+# Palmy incentives
 
 ## Introduction
 
-This repo contains the code and implementation of the contracts used to activate the liquidity mining program on the main market of the Oasyslend protocol.
+This repo contains the code and implementation of the contracts used to activate the liquidity mining program on the main market of the Palmy protocol.
 
 ## About Development
 

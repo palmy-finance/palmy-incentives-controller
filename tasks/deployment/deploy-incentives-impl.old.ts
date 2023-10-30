@@ -4,8 +4,8 @@ import { deployStakedTokenIncentivesController } from '../../helpers/contracts-a
 import { getDefenderRelaySigner } from '../../helpers/defender-utils';
 
 // Shibuya (astar network) addresses
-const STAKED_OASYSLEND = '0x5d666338118763ca0cF6719F479491B76bc88131'; // StakedLay's (StakedTokenV2Rev3) proxy
-const OASYSLEND_SHORT_EXECUTOR = '0x6543076E4315bd82129105890Bc49c18f496a528'; // PoolAdmin
+const STAKED_PALMY = '0x5d666338118763ca0cF6719F479491B76bc88131'; // StakedLay's (StakedTokenV2Rev3) proxy
+const PALMY_SHORT_EXECUTOR = '0x6543076E4315bd82129105890Bc49c18f496a528'; // PoolAdmin
 
 task('deploy-incentives-impl-old', 'Incentives controller implementation deployment').setAction(
   async (_, localBRE) => {
@@ -22,7 +22,7 @@ task('deploy-incentives-impl-old', 'Incentives controller implementation deploym
     }
 
     const incentives = await deployStakedTokenIncentivesController(
-      [STAKED_OASYSLEND], // TODO: reflect OASYSLEND_SHORT_EXECUTOR
+      [STAKED_PALMY], // TODO: reflect PALMY_SHORT_EXECUTOR
       false, // TODO: revert
       deployer
     );

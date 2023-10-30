@@ -66,16 +66,16 @@ export const getProxyAdminPerNetwork = (network: eNetwork): tEthereumAddress =>
 export const getStakedTokenPerNetwork = (network: eNetwork): tEthereumAddress =>
   getParamPerNetwork<tEthereumAddress>(
     {
-      [eEthereumNetwork.kovan]: '0x82ab55Ff927d0E3C42A6Bc08C0B57D35A7896880', // StakedOasysLend
-      [eEthereumNetwork.rinkeby]: '0x542d2690d8B4092F455188622dA51ee478cAD0E0', // StakedOasysLend
+      [eEthereumNetwork.kovan]: '0x82ab55Ff927d0E3C42A6Bc08C0B57D35A7896880', // StakedPalmy
+      [eEthereumNetwork.rinkeby]: '0x542d2690d8B4092F455188622dA51ee478cAD0E0', // StakedPalmy
       [eAstarNetwork.astar]: '0x6FD65f71B3FB5Aa9d794f010AFc65F174012994F', // Proxy-StakedTokenV2Rev3
       [eAstarNetwork.shiden]: '0x87DCF20F2bf4A772a70BdDA142288820bd3Bdf5A', // Proxy-StakedTokenV2Rev3
-      [eAstarNetwork.shibuya]: '0xD0286b992ae9EB8702457559dCA9565bEB20b0DC', // StakedOasysLend
+      [eAstarNetwork.shibuya]: '0xD0286b992ae9EB8702457559dCA9565bEB20b0DC', // StakedPalmy
     },
     network
   );
 
-export const getOasysLendTokenPerNetwork = (network: eNetwork): tEthereumAddress =>
+export const getPalmyTokenPerNetwork = (network: eNetwork): tEthereumAddress =>
   getParamPerNetwork<tEthereumAddress>(
     {
       [eEthereumNetwork.kovan]: '',
@@ -350,7 +350,7 @@ export const getIncentivesConfigPerNetwork = (network: eNetwork): incentivesConf
         incentiveControllerProxy: ZERO_ADDRESS,
         lendingPool: ZERO_ADDRESS,
         poolConfigurator: ZERO_ADDRESS,
-        oasyslendToken: ZERO_ADDRESS,
+        palmyToken: ZERO_ADDRESS,
       },
       [eEthereumNetwork.rinkeby]: {
         addressProvider: ZERO_ADDRESS,
@@ -359,7 +359,7 @@ export const getIncentivesConfigPerNetwork = (network: eNetwork): incentivesConf
         incentiveControllerProxy: ZERO_ADDRESS,
         lendingPool: ZERO_ADDRESS,
         poolConfigurator: ZERO_ADDRESS,
-        oasyslendToken: ZERO_ADDRESS,
+        palmyToken: ZERO_ADDRESS,
       },
       [eAstarNetwork.astar]: {
         addressProvider: '0x4c37A76Bf49c01f91E275d5257a228dad1b74EF9',
@@ -368,7 +368,7 @@ export const getIncentivesConfigPerNetwork = (network: eNetwork): incentivesConf
         incentiveControllerProxy: '0x97Ab79B80E8904214413D8219E8B04373D1030AD',
         lendingPool: '0x90384334333f3356eFDD5b20016350843b90f182',
         poolConfigurator: '0xa1c2ED9e0d09f5e441aC9C44AFa308D38dAf463c',
-        oasyslendToken: '0xc4335B1b76fA6d52877b3046ECA68F6E708a27dd',
+        palmyToken: '0xc4335B1b76fA6d52877b3046ECA68F6E708a27dd',
       },
       [eAstarNetwork.shiden]: {
         addressProvider: '0xa70fFbaFE4B048798bBCBDdfB995fcCec2D1f2CA',
@@ -377,7 +377,7 @@ export const getIncentivesConfigPerNetwork = (network: eNetwork): incentivesConf
         incentiveControllerProxy: '0xD9F3bbC743b7AF7E1108653Cd90E483C03D6D699',
         lendingPool: '0x8022327a333eAeFaD46A723CDcA1aeFdA12afA53',
         poolConfigurator: '0x1aE33143380567fe1246bE4Be5008B7bFa25790A',
-        oasyslendToken: '0xb163716cb6c8b0a56e4f57c394A50F173E34181b',
+        palmyToken: '0xb163716cb6c8b0a56e4f57c394A50F173E34181b',
       },
       [eAstarNetwork.shibuya]: {
         addressProvider: ZERO_ADDRESS,
@@ -386,7 +386,7 @@ export const getIncentivesConfigPerNetwork = (network: eNetwork): incentivesConf
         incentiveControllerProxy: ZERO_ADDRESS,
         lendingPool: ZERO_ADDRESS,
         poolConfigurator: ZERO_ADDRESS,
-        oasyslendToken: ZERO_ADDRESS,
+        palmyToken: ZERO_ADDRESS,
       },
     },
     network

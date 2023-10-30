@@ -6,7 +6,7 @@ pragma solidity 0.7.5;
  * @dev Main registry of addresses part of or connected to the protocol, including permissioned roles
  * - Acting also as factory of proxies and admin of those, so with right to change its implementations
  * - Owned by the Governance
- * @author Horizonx.tech
+ * @author Palmy finance
  **/
 interface ILendingPoolAddressesProvider {
   event MarketIdSet(string newMarketId);

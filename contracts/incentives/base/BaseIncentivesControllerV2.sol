@@ -13,7 +13,7 @@ import {IIncentivesController} from '../../interfaces/IIncentivesController.sol'
 /**
  * @title BaseIncentivesControllerV2
  * @notice Abstract contract template to build Distributors contracts for ERC20 rewards to protocol participants
- * @author Horizonx.tech
+ * @author Palmy finance
  **/
 abstract contract BaseIncentivesControllerV2 is
   IIncentivesController,

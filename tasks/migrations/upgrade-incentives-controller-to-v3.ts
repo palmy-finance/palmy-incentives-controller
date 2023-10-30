@@ -1,4 +1,4 @@
-import { getOasysLendTokenPerNetwork } from './../../helpers/constants';
+import { getPalmyTokenPerNetwork } from './../../helpers/constants';
 import { waitForTx } from '../../helpers/misc-utils';
 import { InitializableAdminUpgradeabilityProxy__factory } from '../../types/factories/InitializableAdminUpgradeabilityProxy__factory';
 import { task } from 'hardhat/config';
@@ -27,7 +27,7 @@ task(
   if (!INCENTIVES_CONTROLLER_ADMIN_PRIVATE_KEY) {
     throw new Error('vault private key is empty');
   }
-  const rewardToken = getOasysLendTokenPerNetwork(networkName);
+  const rewardToken = getPalmyTokenPerNetwork(networkName);
   if (!isAddress(rewardToken)) {
     throw Error('Missing or incorrect rewardToken param');
   }

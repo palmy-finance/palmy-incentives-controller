@@ -10,7 +10,7 @@ import {
 } from '../../helpers/contracts-accessors';
 import { MAX_UINT_AMOUNT, RANDOM_ADDRESSES, ZERO_ADDRESS } from '../../helpers/constants';
 import { StakedTokenIncentivesController__factory } from '../../types';
-import { deployStakedOasysLendV2 } from '../helpers/deploy';
+import { deployStakedPalmyV2 } from '../helpers/deploy';
 
 makeSuite('IncentivesController misc tests', (testEnv) => {
   it('constructor should assign correct params', async () => {
@@ -31,7 +31,7 @@ makeSuite('IncentivesController misc tests', (testEnv) => {
     const token = await deployMintableErc20(['Token', 'TOKEN']);
     const stkTokenProxy = await deployInitializableAdminUpgradeabilityProxy();
     const incentiveProxy = await deployInitializableAdminUpgradeabilityProxy();
-    const stkTokenImpl = await deployStakedOasysLendV2([
+    const stkTokenImpl = await deployStakedPalmyV2([
       token.address,
       token.address,
       '0', // dummy
