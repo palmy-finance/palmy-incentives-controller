@@ -12,18 +12,14 @@ import {BaseIncentivesControllerV3} from './base/BaseIncentivesControllerV3.sol'
  * @notice Distributor contract for ERC20 rewards to the protocol participants that pulls ERC20 from external account
  * @author Palmy finance
  **/
-contract PullRewardsIncentivesControllerV3 is
-  BaseIncentivesControllerV3
-{
+contract PullRewardsIncentivesControllerV3 is BaseIncentivesControllerV3 {
   using SafeERC20 for IERC20;
 
   address internal _rewardsVault;
 
   event RewardsVaultUpdated(address indexed vault);
-  
-  constructor(IERC20 rewardToken)
-    BaseIncentivesControllerV3(rewardToken)
-  {}
+
+  constructor(IERC20 rewardToken) BaseIncentivesControllerV3(rewardToken) {}
 
   /**
    * @dev Initialize BaseIncentivesController
@@ -52,14 +48,13 @@ contract PullRewardsIncentivesControllerV3 is
     emit RewardsVaultUpdated(rewardsVault);
   }
 
- 
   /// @inheritdoc BaseIncentivesControllerV3
   function _transferRewards(address to, uint256 amount) internal override {
     IERC20(REWARD_TOKEN).safeTransferFrom(_rewardsVault, to, amount);
   }
 
   /**
-   * @dev migrate OAL token to new vault
+   * @dev migrate WOAS token to new vault
    **/
   function migrate() external onlyEmissionManager {
     IERC20(REWARD_TOKEN).transfer(_rewardsVault, IERC20(REWARD_TOKEN).balanceOf(address(this)));
