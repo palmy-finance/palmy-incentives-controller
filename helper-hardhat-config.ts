@@ -1,5 +1,5 @@
 // @ts-ignore
-import { eAstarNetwork, eEthereumNetwork, iParamsPerNetwork } from './helpers/types';
+import { eOasysNetwork, eEthereumNetwork, iParamsPerNetwork } from './helpers/types';
 
 require('dotenv').config();
 
@@ -24,15 +24,8 @@ export const NETWORKS_RPC_URL: iParamsPerNetwork<string> = {
   [eEthereumNetwork.hardhat]: 'http://localhost:8545',
   [eEthereumNetwork.buidlerevm]: 'http://localhost:8545',
   [eEthereumNetwork.tenderlyMain]: `https://rpc.tenderly.co/fork/${TENDERLY_FORK_ID}`,
-  [eAstarNetwork.astar]: BWARE_LABS_KEY
-    ? `https://astar-api.bwarelabs.com/${BWARE_LABS_KEY}`
-    : 'https://rpc.astar.network:8545',
-  [eAstarNetwork.shiden]: BWARE_LABS_KEY
-    ? `https://shiden-api.bwarelabs.com/${BWARE_LABS_KEY}`
-    : 'https://shiden.api.onfinality.io/public',
-  [eAstarNetwork.shibuya]: BWARE_LABS_KEY
-    ? `https://shibuya-api.bwarelabs.com/${BWARE_LABS_KEY}`
-    : 'https://rpc.shibuya.astar.network:8545',
+  [eOasysNetwork.oasys]: 'https://rpc.mainnet.oasys.games',
+  [eOasysNetwork.testnet]: 'https://rpc.testnet.oasys.games',
 };
 
 export const NETWORKS_DEFAULT_GAS: iParamsPerNetwork<number> = {
@@ -43,7 +36,6 @@ export const NETWORKS_DEFAULT_GAS: iParamsPerNetwork<number> = {
   [eEthereumNetwork.hardhat]: 1 * GWEI,
   [eEthereumNetwork.buidlerevm]: 1 * GWEI,
   [eEthereumNetwork.tenderlyMain]: 1 * GWEI,
-  [eAstarNetwork.astar]: 10 * GWEI,
-  [eAstarNetwork.shiden]: 1 * GWEI,
-  [eAstarNetwork.shibuya]: 1 * GWEI,
+  [eOasysNetwork.oasys]: 10 * GWEI,
+  [eOasysNetwork.testnet]: 10 * GWEI,
 };

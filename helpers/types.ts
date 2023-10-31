@@ -4,7 +4,7 @@ export interface SymbolMap<T> {
   [symbol: string]: T;
 }
 
-export type eNetwork = eEthereumNetwork | eAstarNetwork;
+export type eNetwork = eEthereumNetwork | eOasysNetwork;
 
 export enum eContractid {
   DistributionManager = 'DistributionManager',
@@ -27,10 +27,9 @@ export enum eEthereumNetwork {
   tenderlyMain = 'tenderlyMain',
 }
 
-export enum eAstarNetwork {
-  astar = 'astar',
-  shiden = 'shiden',
-  shibuya = 'shibuya',
+export enum eOasysNetwork {
+  oasys = 'oasys',
+  testnet = 'testnet',
 }
 
 export enum EthereumNetworkNames {
@@ -38,7 +37,7 @@ export enum EthereumNetworkNames {
   main = 'main',
 }
 
-export type iParamsPerNetwork<T> = iEthereumParamsPerNetwork<T> | iAstarParamsPerNetwork<T>;
+export type iParamsPerNetwork<T> = iEthereumParamsPerNetwork<T> | iOasysParamsPerNetwork<T>;
 
 export interface iEthereumParamsPerNetwork<T> {
   [eEthereumNetwork.coverage]: T;
@@ -50,24 +49,17 @@ export interface iEthereumParamsPerNetwork<T> {
   [eEthereumNetwork.tenderlyMain]: T;
 }
 
-export interface iAstarParamsPerNetwork<T> {
-  [eAstarNetwork.astar]: T;
-  [eAstarNetwork.shiden]: T;
-  [eAstarNetwork.shibuya]: T;
+export interface iOasysParamsPerNetwork<T> {
+  [eOasysNetwork.oasys]: T;
+  [eOasysNetwork.testnet]: T;
 }
 export interface iAssetBase<T> {
   WETH: T;
+  PLMY: T;
+  WBTC: T;
+  WOAS: T;
   USDC: T;
   USDT: T;
-  OAL: T;
-  WBTC: T;
-  WASTR: T;
-  WSDN: T;
-  DAI: T;
-  BUSD: T;
-  MATIC: T;
-  BNB: T;
-  DOT: T;
 }
 
 export interface incentivesConfig {

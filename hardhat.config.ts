@@ -3,7 +3,7 @@ import fs from 'fs';
 import { HardhatUserConfig } from 'hardhat/types';
 // @ts-ignore
 import { accounts } from './test-wallets';
-import { eEthereumNetwork, eNetwork, eAstarNetwork } from './helpers/types';
+import { eEthereumNetwork, eNetwork, eOasysNetwork } from './helpers/types';
 import { BUIDLEREVM_CHAINID, COVERAGE_CHAINID } from './helpers/constants';
 import { NETWORKS_RPC_URL, NETWORKS_DEFAULT_GAS } from './helper-hardhat-config';
 
@@ -114,9 +114,8 @@ const buidlerConfig: HardhatUserConfig = {
     main: getCommonNetworkConfig(eEthereumNetwork.main, 1),
     tenderlyMain: getCommonNetworkConfig(eEthereumNetwork.tenderlyMain, 3030),
     tenderly: getCommonNetworkConfig(eEthereumNetwork.tenderlyMain, 3030),
-    astar: getCommonNetworkConfig(eAstarNetwork.astar, 592),
-    shiden: getCommonNetworkConfig(eAstarNetwork.shiden, 336),
-    shibuya: getCommonNetworkConfig(eAstarNetwork.shibuya, 81),
+    oasys: getCommonNetworkConfig(eOasysNetwork.oasys, 248),
+    testnet: getCommonNetworkConfig(eOasysNetwork.testnet, 9372),
     hardhat: {
       hardfork: 'istanbul',
       blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,

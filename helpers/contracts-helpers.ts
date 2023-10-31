@@ -9,8 +9,8 @@ import {
   iParamsPerNetwork,
   eNetwork,
   iEthereumParamsPerNetwork,
-  eAstarNetwork,
-  iAstarParamsPerNetwork,
+  eOasysNetwork,
+  iOasysParamsPerNetwork,
 } from './types';
 import { Artifact } from 'hardhat/types';
 import { verifyContract } from './etherscan-verification';
@@ -71,9 +71,9 @@ export const deployContract = async <ContractType extends Contract>(
   contractName: string,
   args: any[]
 ): Promise<ContractType> => {
-  const contract = (await (await DRE.ethers.getContractFactory(contractName)).deploy(
-    ...args
-  )) as ContractType;
+  const contract = (await (
+    await DRE.ethers.getContractFactory(contractName)
+  ).deploy(...args)) as ContractType;
   await waitForTx(contract.deployTransaction);
   await registerContractInJsonDb(<eContractid>contractName, contract);
   return contract;
@@ -132,15 +132,9 @@ export const linkBytecode = (artifact: Artifact, libraries: any) => {
 };
 
 export const getParamPerNetwork = <T>(param: iParamsPerNetwork<T>, network: eNetwork) => {
-  const {
-    main,
-    kovan,
-    rinkeby,
-    coverage,
-    buidlerevm,
-    tenderlyMain,
-  } = param as iEthereumParamsPerNetwork<T>;
-  const { astar, shiden, shibuya } = param as iAstarParamsPerNetwork<T>;
+  const { main, kovan, rinkeby, coverage, buidlerevm, tenderlyMain } =
+    param as iEthereumParamsPerNetwork<T>;
+  const { oasys, testnet } = param as iOasysParamsPerNetwork<T>;
   const MAINNET_FORK = process.env.MAINNET_FORK === 'true';
   if (MAINNET_FORK) {
     return main;
@@ -161,12 +155,10 @@ export const getParamPerNetwork = <T>(param: iParamsPerNetwork<T>, network: eNet
       return main;
     case eEthereumNetwork.tenderlyMain:
       return tenderlyMain;
-    case eAstarNetwork.astar:
-      return astar;
-    case eAstarNetwork.shiden:
-      return shiden;
-    case eAstarNetwork.shibuya:
-      return shibuya;
+    case eOasysNetwork.oasys:
+      return oasys;
+    case eOasysNetwork.testnet:
+      return testnet;
   }
 };
 
@@ -181,32 +173,32 @@ export const getSignatureFromTypedData = (
 };
 
 type ContractGetter = { address?: string; slug?: string };
-export const getContractFactory = <ContractType extends Contract>(
-  contractName: eContractid
-) => async (contractGetter?: ContractGetter): Promise<ContractType> => {
-  let deployedContract = '';
-  if (!contractGetter?.address) {
-    try {
-      deployedContract = (
-        await getDb()
-          .get(
-            `${contractName}${contractGetter?.slug ? `-${contractGetter.slug}` : ''}.${
-              DRE.network.name
-            }`
-          )
-          .value()
-      ).address;
-    } catch (e) {
-      throw new Error(
-        `Contract ${contractName} was not deployed on ${DRE.network.name} or not stored in DB`
-      );
+export const getContractFactory =
+  <ContractType extends Contract>(contractName: eContractid) =>
+  async (contractGetter?: ContractGetter): Promise<ContractType> => {
+    let deployedContract = '';
+    if (!contractGetter?.address) {
+      try {
+        deployedContract = (
+          await getDb()
+            .get(
+              `${contractName}${contractGetter?.slug ? `-${contractGetter.slug}` : ''}.${
+                DRE.network.name
+              }`
+            )
+            .value()
+        ).address;
+      } catch (e) {
+        throw new Error(
+          `Contract ${contractName} was not deployed on ${DRE.network.name} or not stored in DB`
+        );
+      }
     }
-  }
-  return (await DRE.ethers.getContractAt(
-    contractName,
-    contractGetter?.address || deployedContract
-  )) as ContractType;
-};
+    return (await DRE.ethers.getContractAt(
+      contractName,
+      contractGetter?.address || deployedContract
+    )) as ContractType;
+  };
 
 export const getBlockTimestamp = async (blockNumber?: number): Promise<number> => {
   if (!blockNumber) {
