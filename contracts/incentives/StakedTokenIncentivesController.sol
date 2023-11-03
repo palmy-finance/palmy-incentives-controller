@@ -17,26 +17,24 @@ import {IStakedTokenWithConfig} from '../interfaces/IStakedTokenWithConfig.sol';
 contract StakedTokenIncentivesController is BaseIncentivesController {
   using SafeERC20 for IERC20;
 
-  IStakedTokenWithConfig public immutable STAKE_TOKEN;
+  address public stakeToken;
 
-  constructor(IStakedTokenWithConfig stakeToken)
-    BaseIncentivesController(IERC20(address(stakeToken)))
-  {
-    STAKE_TOKEN = stakeToken;
+  function initialize(address emissionManager, address _stakeToken) external initializer {
+    require(_stakeToken != address(0), 'INVALID_STAKED_TOKEN');
+    stakeToken = _stakeToken;
+    super.initialize(_stakeToken);
+    require(emissionManager != address(0), 'INVALID_EMISSION_MANAGER');
+    //approves the safety module to allow staking
+    IERC20(STAKE_TOKEN().STAKED_TOKEN()).safeApprove(stakeToken, type(uint256).max);
+    _emissionManager = emissionManager;
   }
 
-  /**
-   * @dev Initialize IStakedTokenIncentivesController
-   **/
-  function initialize(address emissionManager) external initializer {
-    require(emissionManager != address(0), "INVALID_EMISSION_MANAGER");
-    //approves the safety module to allow staking
-    IERC20(STAKE_TOKEN.STAKED_TOKEN()).safeApprove(address(STAKE_TOKEN), type(uint256).max);
-    _emissionManager = emissionManager;
+  function STAKE_TOKEN() public view returns (IStakedTokenWithConfig) {
+    return IStakedTokenWithConfig(stakeToken);
   }
 
   /// @inheritdoc BaseIncentivesController
   function _transferRewards(address to, uint256 amount) internal override {
-    STAKE_TOKEN.stake(to, amount);
+    STAKE_TOKEN().stake(to, amount);
   }
 }

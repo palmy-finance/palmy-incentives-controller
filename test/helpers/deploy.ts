@@ -34,9 +34,7 @@ export const testDeployIncentivesController = async (
     (1000 * 60 * 60).toString(),
   ]);
 
-  const incentivesImplementation = await deployStakedTokenIncentivesController([
-    stakeProxy.address,
-  ]);
+  const incentivesImplementation = await deployStakedTokenIncentivesController();
 
   // Initialize proxies
   const stakeInit = stakeV3.interface.encodeFunctionData(
@@ -46,6 +44,7 @@ export const testDeployIncentivesController = async (
   );
   const incentivesInit = incentivesImplementation.interface.encodeFunctionData('initialize', [
     emissionManagerAddress,
+    stakeProxy.address,
   ]);
 
   await (

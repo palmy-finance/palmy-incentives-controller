@@ -19,15 +19,18 @@ contract PullRewardsIncentivesControllerV3 is BaseIncentivesControllerV3 {
 
   event RewardsVaultUpdated(address indexed vault);
 
-  constructor(IERC20 rewardToken) BaseIncentivesControllerV3(rewardToken) {}
-
   /**
    * @dev Initialize BaseIncentivesController
    * @param rewardsVault rewards vault to pull ERC20 funds
    **/
-  function initialize(address rewardsVault, address emissionManager) external initializer {
+  function initialize(
+    address rewardsVault,
+    address emissionManager,
+    address rewardToken
+  ) external initializer {
     _rewardsVault = rewardsVault;
     _emissionManager = emissionManager;
+    super.initialize(rewardToken);
     emit RewardsVaultUpdated(_rewardsVault);
   }
 
@@ -50,13 +53,13 @@ contract PullRewardsIncentivesControllerV3 is BaseIncentivesControllerV3 {
 
   /// @inheritdoc BaseIncentivesControllerV3
   function _transferRewards(address to, uint256 amount) internal override {
-    IERC20(REWARD_TOKEN).safeTransferFrom(_rewardsVault, to, amount);
+    IERC20(REWARD_TOKEN()).safeTransferFrom(_rewardsVault, to, amount);
   }
 
   /**
    * @dev migrate WOAS token to new vault
    **/
   function migrate() external onlyEmissionManager {
-    IERC20(REWARD_TOKEN).transfer(_rewardsVault, IERC20(REWARD_TOKEN).balanceOf(address(this)));
+    IERC20(REWARD_TOKEN()).transfer(_rewardsVault, IERC20(REWARD_TOKEN()).balanceOf(address(this)));
   }
 }

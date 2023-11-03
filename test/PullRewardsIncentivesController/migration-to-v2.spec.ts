@@ -21,13 +21,12 @@ makeSuite('PullRewardsIncentivesController - migrate', (testEnv: TestEnv) => {
     );
     const [user, admin] = await getEthersSigners();
 
-    const v2Impl = await new PullRewardsIncentivesControllerV2__factory(admin).deploy(
-      token.address
-    );
+    const v2Impl = await new PullRewardsIncentivesControllerV2__factory(admin).deploy();
     expect(await v2Impl.REVISION()).to.be.eq(2);
     const v2encodedInit = v2Impl.interface.encodeFunctionData('initialize', [
       rewardsVault.address,
       await admin.getAddress(),
+      token.address,
     ]);
     const proxy = InitializableAdminUpgradeabilityProxy__factory.connect(
       pullRewardsIncentivesController.address,
@@ -43,13 +42,13 @@ makeSuite('PullRewardsIncentivesController - migrate', (testEnv: TestEnv) => {
     const lDAIEmissionPerSecond = (await v2Instance.getAssetData(lDaiBaseMock.address))[1];
     expect(lDAIEmissionPerSecond).to.be.eq(emissionPerSecond);
   });
-  it('migrartion: lay on IncentivesController should be transferred to new vault', async () => {
+  it('migrartion: woas on IncentivesController should be transferred to new vault', async () => {
     const { pullRewardsIncentivesController, token, rewardsVault } = testEnv;
     const [newAdmin, emissionManager, user2] = await getEthersSigners();
-    const layAmountOnIncentivesController = parseEther('100');
+    const woasAmountOnIncentivesController = parseEther('100');
     await token
       .connect(user2)
-      .transfer(pullRewardsIncentivesController.address, layAmountOnIncentivesController);
+      .transfer(pullRewardsIncentivesController.address, woasAmountOnIncentivesController);
     const proxyInstance = InitializableAdminUpgradeabilityProxy__factory.connect(
       pullRewardsIncentivesController.address,
       emissionManager
@@ -64,6 +63,6 @@ makeSuite('PullRewardsIncentivesController - migrate', (testEnv: TestEnv) => {
     await v2Instance.connect(emissionManager).migrate();
     const vaultAmountAfter = await token.balanceOf(rewardsVault.address);
     expect(await token.balanceOf(pullRewardsIncentivesController.address)).to.be.eq(0);
-    expect(vaultAmountAfter).to.be.eq(vaultAmountBefore.add(layAmountOnIncentivesController));
+    expect(vaultAmountAfter).to.be.eq(vaultAmountBefore.add(woasAmountOnIncentivesController));
   });
 });

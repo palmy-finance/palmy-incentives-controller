@@ -24,7 +24,7 @@ abstract contract BaseIncentivesControllerV2 is
 
   uint256 public constant REVISION = 2;
 
-  address public immutable override REWARD_TOKEN;
+  address internal rewardToken;
 
   mapping(address => uint256) internal _usersUnclaimedRewards;
 
@@ -37,23 +37,30 @@ abstract contract BaseIncentivesControllerV2 is
     _;
   }
 
-  constructor(IERC20 rewardToken) {
-    REWARD_TOKEN = address(rewardToken);
+  function initialize(address _rewardToken) internal {
+    require(_rewardToken != address(0), 'INVALID_REWARD_TOKEN');
+    rewardToken = _rewardToken;
+  }
+
+  function REWARD_TOKEN() public view override returns (address) {
+    return rewardToken;
   }
 
   /// @inheritdoc IIncentivesController
-  function configureAssets(address[] calldata assets, uint256[] calldata emissionsPerSecond)
-    external
-    override
-    onlyEmissionManager
-  {
+  function configureAssets(
+    address[] calldata assets,
+    uint256[] calldata emissionsPerSecond
+  ) external override onlyEmissionManager {
     require(assets.length == emissionsPerSecond.length, 'INVALID_CONFIGURATION');
 
-    DistributionTypes.AssetConfigInput[] memory assetsConfig =
-      new DistributionTypes.AssetConfigInput[](assets.length);
+    DistributionTypes.AssetConfigInput[]
+      memory assetsConfig = new DistributionTypes.AssetConfigInput[](assets.length);
 
     for (uint256 i = 0; i < assets.length; i++) {
-      require(uint104(emissionsPerSecond[i]) == emissionsPerSecond[i], 'Index overflow at emissionsPerSecond');
+      require(
+        uint104(emissionsPerSecond[i]) == emissionsPerSecond[i],
+        'Index overflow at emissionsPerSecond'
+      );
       assetsConfig[i].underlyingAsset = assets[i];
       assetsConfig[i].emissionPerSecond = uint104(emissionsPerSecond[i]);
       assetsConfig[i].totalStaked = IScaledBalanceToken(assets[i]).scaledTotalSupply();
@@ -62,11 +69,7 @@ abstract contract BaseIncentivesControllerV2 is
   }
 
   /// @inheritdoc IIncentivesController
-  function handleAction(
-    address user,
-    uint256 totalSupply,
-    uint256 userBalance
-  ) external override {
+  function handleAction(address user, uint256 totalSupply, uint256 userBalance) external override {
     uint256 accruedRewards = _updateUserAssetInternal(user, msg.sender, userBalance, totalSupply);
     if (accruedRewards != 0) {
       _usersUnclaimedRewards[user] = _usersUnclaimedRewards[user].add(accruedRewards);
@@ -75,16 +78,15 @@ abstract contract BaseIncentivesControllerV2 is
   }
 
   /// @inheritdoc IIncentivesController
-  function getRewardsBalance(address[] calldata assets, address user)
-    external
-    view
-    override
-    returns (uint256)
-  {
+  function getRewardsBalance(
+    address[] calldata assets,
+    address user
+  ) external view override returns (uint256) {
     uint256 unclaimedRewards = _usersUnclaimedRewards[user];
 
-    DistributionTypes.UserStakeInput[] memory userState =
-      new DistributionTypes.UserStakeInput[](assets.length);
+    DistributionTypes.UserStakeInput[] memory userState = new DistributionTypes.UserStakeInput[](
+      assets.length
+    );
     for (uint256 i = 0; i < assets.length; i++) {
       userState[i].underlyingAsset = assets[i];
       (userState[i].stakedByUser, userState[i].totalStaked) = IScaledBalanceToken(assets[i])
@@ -117,11 +119,10 @@ abstract contract BaseIncentivesControllerV2 is
   }
 
   /// @inheritdoc IIncentivesController
-  function claimRewardsToSelf(address[] calldata assets, uint256 amount)
-    external
-    override
-    returns (uint256)
-  {
+  function claimRewardsToSelf(
+    address[] calldata assets,
+    uint256 amount
+  ) external override returns (uint256) {
     return _claimRewards(assets, amount, msg.sender, msg.sender, msg.sender);
   }
 
@@ -168,8 +169,9 @@ abstract contract BaseIncentivesControllerV2 is
     uint256 unclaimedRewards = _usersUnclaimedRewards[user];
 
     if (amount > unclaimedRewards) {
-      DistributionTypes.UserStakeInput[] memory userState =
-        new DistributionTypes.UserStakeInput[](assets.length);
+      DistributionTypes.UserStakeInput[] memory userState = new DistributionTypes.UserStakeInput[](
+        assets.length
+      );
       for (uint256 i = 0; i < assets.length; i++) {
         userState[i].underlyingAsset = assets[i];
         (userState[i].stakedByUser, userState[i].totalStaked) = IScaledBalanceToken(assets[i])
