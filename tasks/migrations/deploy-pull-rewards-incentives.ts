@@ -54,10 +54,7 @@ task(
       console.log(`[PullRewardsIncentivesController] Starting deployment:`);
       console.log(`  - Network name: ${networkName}`);
 
-      const incentivesControllerImpl = await deployPullRewardsIncentivesController(
-        [rewardToken],
-        verify
-      );
+      const incentivesControllerImpl = await deployPullRewardsIncentivesController(verify);
       console.log(`  - Deployed implementation of PullRewardsIncentivesController`);
 
       const incentivesProxy = await deployInitializableAdminUpgradeabilityProxy(verify);
@@ -66,6 +63,7 @@ task(
       const encodedParams = incentivesControllerImpl.interface.encodeFunctionData('initialize', [
         rewardsVault,
         emissionManager,
+        rewardToken,
       ]);
 
       await waitForTx(

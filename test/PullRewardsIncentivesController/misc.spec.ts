@@ -12,18 +12,6 @@ import { PullRewardsIncentivesController__factory } from '../../types';
 import { getBlockTimestamp } from '../../helpers/contracts-helpers';
 
 makeSuite('PullRewardsIncentivesController misc tests', (testEnv) => {
-  it('constructor should assign correct params', async () => {
-    const fakeToken = RANDOM_ADDRESSES[5];
-
-    const pullRewardsIncentivesController = await deployPullRewardsIncentivesController([
-      fakeToken,
-    ]);
-    await expect(await pullRewardsIncentivesController.REWARD_TOKEN()).to.be.equal(fakeToken);
-    await expect((await pullRewardsIncentivesController.EMISSION_MANAGER()).toString()).to.be.equal(
-      ZERO_ADDRESS
-    );
-  });
-
   it('initializer should assign correct params', async () => {
     const { users } = testEnv;
     const emissionManager = users[0];
@@ -32,10 +20,11 @@ makeSuite('PullRewardsIncentivesController misc tests', (testEnv) => {
     const proxyAdmin = RANDOM_ADDRESSES[2];
 
     const proxy = await deployInitializableAdminUpgradeabilityProxy();
-    const impl = await deployPullRewardsIncentivesController([fakeToken]);
+    const impl = await deployPullRewardsIncentivesController();
     const encodedParams = impl.interface.encodeFunctionData('initialize', [
       fakeRewardsVault,
       emissionManager.address,
+      fakeToken,
     ]);
     await (
       await proxy.functions['initialize(address,address,bytes)'](
@@ -53,6 +42,7 @@ makeSuite('PullRewardsIncentivesController misc tests', (testEnv) => {
     await expect((await connectedImpl.EMISSION_MANAGER()).toString()).to.be.equal(
       emissionManager.address
     );
+    await expect((await connectedImpl.REWARD_TOKEN()).toString()).to.be.equal(fakeToken);
   });
 
   it('Should return same index while multiple asset index updates', async () => {

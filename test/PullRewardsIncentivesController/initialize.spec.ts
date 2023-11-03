@@ -8,22 +8,28 @@ const { expect } = require('chai');
 makeSuite('pullRewardsIncentivesController initialize', (testEnv: TestEnv) => {
   it('Tries to call initialize second time, should be reverted', async () => {
     const { pullRewardsIncentivesController } = testEnv;
-    await expect(pullRewardsIncentivesController.initialize(ZERO_ADDRESS, ZERO_ADDRESS)).to.be
-      .reverted;
+    await expect(
+      pullRewardsIncentivesController.initialize(ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS)
+    ).to.be.reverted;
   });
   it('should be reverted if emissionManager is zero address', async () => {
     const { stakedToken, token } = testEnv;
     const target = await new PullRewardsIncentivesController__factory(
       await getFirstSigner()
-    ).deploy(stakedToken.address);
+    ).deploy();
     const anyAddress = token.address;
-    await expect(target.initialize(anyAddress, ZERO_ADDRESS)).to.be.revertedWith(
-      'INVALID_EMISSION_MANAGER'
-    );
+    await expect(
+      target.initialize(anyAddress, ZERO_ADDRESS, stakedToken.address)
+    ).to.be.revertedWith('INVALID_EMISSION_MANAGER');
   });
   it('should be reverted if rewardToken is zero address', async () => {
-    await expect(
-      new PullRewardsIncentivesController__factory(await getFirstSigner()).deploy(ZERO_ADDRESS)
-    ).to.be.revertedWith('INVALID_REWARD_ADDRESS');
+    const { token } = testEnv;
+    const target = await new PullRewardsIncentivesController__factory(
+      await getFirstSigner()
+    ).deploy();
+    const anyAddress = token.address;
+    await expect(target.initialize(anyAddress, anyAddress, ZERO_ADDRESS)).to.be.revertedWith(
+      'INVALID_REWARD_TOKEN'
+    );
   });
 });

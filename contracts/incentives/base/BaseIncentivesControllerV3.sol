@@ -24,7 +24,7 @@ abstract contract BaseIncentivesControllerV3 is
 
   uint256 public constant REVISION = 3;
 
-  address public immutable override REWARD_TOKEN;
+  address internal rewardToken;
 
   mapping(address => uint256) internal _usersUnclaimedRewards;
 
@@ -35,12 +35,20 @@ abstract contract BaseIncentivesControllerV3 is
   mapping(address => bool) internal _whitelistedClaimers;
 
   modifier onlyAuthorizedClaimers(address claimer, address user) {
-    require((_authorizedClaimers[user] == claimer || _whitelistedClaimers[claimer]), 'CLAIMER_UNAUTHORIZED');
+    require(
+      (_authorizedClaimers[user] == claimer || _whitelistedClaimers[claimer]),
+      'CLAIMER_UNAUTHORIZED'
+    );
     _;
   }
 
-  constructor(IERC20 rewardToken) {
-    REWARD_TOKEN = address(rewardToken);
+  function initialize(address _rewardToken) internal {
+    require(_rewardToken != address(0), 'INVALID_REWARD_TOKEN');
+    rewardToken = _rewardToken;
+  }
+
+  function REWARD_TOKEN() public view override returns (address) {
+    return rewardToken;
   }
 
   function addWhitelistedClaimer(address claimer) public onlyEmissionManager {
@@ -52,11 +60,10 @@ abstract contract BaseIncentivesControllerV3 is
   }
 
   /// @inheritdoc IIncentivesController
-  function configureAssets(address[] calldata assets, uint256[] calldata emissionsPerSecond)
-    external
-    override
-    onlyEmissionManager
-  {
+  function configureAssets(
+    address[] calldata assets,
+    uint256[] calldata emissionsPerSecond
+  ) external override onlyEmissionManager {
     require(assets.length == emissionsPerSecond.length, 'INVALID_CONFIGURATION');
 
     DistributionTypes.AssetConfigInput[]
@@ -75,11 +82,7 @@ abstract contract BaseIncentivesControllerV3 is
   }
 
   /// @inheritdoc IIncentivesController
-  function handleAction(
-    address user,
-    uint256 totalSupply,
-    uint256 userBalance
-  ) external override {
+  function handleAction(address user, uint256 totalSupply, uint256 userBalance) external override {
     uint256 accruedRewards = _updateUserAssetInternal(user, msg.sender, userBalance, totalSupply);
     if (accruedRewards != 0) {
       _usersUnclaimedRewards[user] = _usersUnclaimedRewards[user].add(accruedRewards);
@@ -88,12 +91,10 @@ abstract contract BaseIncentivesControllerV3 is
   }
 
   /// @inheritdoc IIncentivesController
-  function getRewardsBalance(address[] calldata assets, address user)
-    external
-    view
-    override
-    returns (uint256)
-  {
+  function getRewardsBalance(
+    address[] calldata assets,
+    address user
+  ) external view override returns (uint256) {
     uint256 unclaimedRewards = _usersUnclaimedRewards[user];
 
     DistributionTypes.UserStakeInput[] memory userState = new DistributionTypes.UserStakeInput[](
@@ -131,11 +132,10 @@ abstract contract BaseIncentivesControllerV3 is
   }
 
   /// @inheritdoc IIncentivesController
-  function claimRewardsToSelf(address[] calldata assets, uint256 amount)
-    external
-    override
-    returns (uint256)
-  {
+  function claimRewardsToSelf(
+    address[] calldata assets,
+    uint256 amount
+  ) external override returns (uint256) {
     return _claimRewards(assets, amount, msg.sender, msg.sender, msg.sender);
   }
 

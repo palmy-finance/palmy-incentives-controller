@@ -12,27 +12,26 @@ import {BaseIncentivesController} from './base/BaseIncentivesController.sol';
  * @notice Distributor contract for ERC20 rewards to the protocol participants that pulls ERC20 from external account
  * @author Palmy finance
  **/
-contract PullRewardsIncentivesController is
-  BaseIncentivesController
-{
+contract PullRewardsIncentivesController is BaseIncentivesController {
   using SafeERC20 for IERC20;
 
   address internal _rewardsVault;
 
   event RewardsVaultUpdated(address indexed vault);
-  
-  constructor(IERC20 rewardToken)
-    BaseIncentivesController(rewardToken)
-  {}
 
   /**
    * @dev Initialize BaseIncentivesController
    * @param rewardsVault rewards vault to pull ERC20 funds
    **/
-  function initialize(address rewardsVault, address emissionManager) external initializer {
-    require(emissionManager != address(0), "INVALID_EMISSION_MANAGER");
+  function initialize(
+    address rewardsVault,
+    address emissionManager,
+    address rewardToken
+  ) external initializer {
+    require(emissionManager != address(0), 'INVALID_EMISSION_MANAGER');
     _rewardsVault = rewardsVault;
     _emissionManager = emissionManager;
+    super.initialize(rewardToken);
     emit RewardsVaultUpdated(_rewardsVault);
   }
 
@@ -53,9 +52,8 @@ contract PullRewardsIncentivesController is
     emit RewardsVaultUpdated(rewardsVault);
   }
 
- 
   /// @inheritdoc BaseIncentivesController
   function _transferRewards(address to, uint256 amount) internal override {
-    IERC20(REWARD_TOKEN).safeTransferFrom(_rewardsVault, to, amount);
+    IERC20(REWARD_TOKEN()).safeTransferFrom(_rewardsVault, to, amount);
   }
 }

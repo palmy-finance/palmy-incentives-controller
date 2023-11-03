@@ -13,16 +13,6 @@ import { StakedTokenIncentivesController__factory } from '../../types';
 import { deployStakedPalmyV2 } from '../helpers/deploy';
 
 makeSuite('IncentivesController misc tests', (testEnv) => {
-  it('constructor should assign correct params', async () => {
-    const psm = RANDOM_ADDRESSES[5];
-
-    const incentivesController = await deployStakedTokenIncentivesController([psm]);
-    await expect(await incentivesController.STAKE_TOKEN()).to.be.equal(psm);
-    await expect((await incentivesController.EMISSION_MANAGER()).toString()).to.be.equal(
-      ZERO_ADDRESS
-    );
-  });
-
   it('initializer should assign correct params', async () => {
     const { users } = testEnv;
     const emissionManager = users[0];
@@ -40,11 +30,12 @@ makeSuite('IncentivesController misc tests', (testEnv) => {
       RANDOM_ADDRESSES[0], // dummy
       '0', // dummy
     ]);
-    const incentiveImpl = await deployStakedTokenIncentivesController([stkTokenProxy.address]);
+    const incentiveImpl = await deployStakedTokenIncentivesController();
     // @ts-ignore
     const stkTokenEncodedParams = stkTokenImpl.interface.encodeFunctionData('initialize', []);
     const incentiveEncodedParams = incentiveImpl.interface.encodeFunctionData('initialize', [
       emissionManager.address,
+      stkTokenProxy.address,
     ]);
     await (
       await stkTokenProxy.functions['initialize(address,address,bytes)'](
@@ -67,6 +58,9 @@ makeSuite('IncentivesController misc tests', (testEnv) => {
 
     await expect((await connectedImpl.EMISSION_MANAGER()).toString()).to.be.equal(
       emissionManager.address
+    );
+    await expect((await connectedImpl.REWARD_TOKEN()).toString()).to.be.equal(
+      stkTokenProxy.address
     );
   });
 
