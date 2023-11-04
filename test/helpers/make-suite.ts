@@ -12,7 +12,7 @@ import { LTokenMock } from '../../types/LTokenMock';
 import {
   PullRewardsIncentivesController,
   PullRewardsIncentivesController__factory,
-  StakedPalmyV2,
+  StakedOasV2,
   StakedTokenIncentivesController,
 } from '../../types';
 
@@ -34,7 +34,7 @@ export interface TestEnv {
   token: MintableErc20;
   incentivesController: StakedTokenIncentivesController;
   pullRewardsIncentivesController: PullRewardsIncentivesController;
-  stakedToken: StakedPalmyV2;
+  stakedToken: StakedOasV2;
   lDaiMock: LTokenMock;
   lWethMock: LTokenMock;
   lDaiBaseMock: LTokenMock;
@@ -52,7 +52,7 @@ const testEnv: TestEnv = {
   deployer: {} as SignerWithAddress,
   users: [] as SignerWithAddress[],
   token: {} as MintableErc20,
-  stakedToken: {} as StakedPalmyV2,
+  stakedToken: {} as StakedOasV2,
   incentivesController: {} as StakedTokenIncentivesController,
   pullRewardsIncentivesController: {} as PullRewardsIncentivesController,
   lDaiMock: {} as LTokenMock,
@@ -63,7 +63,7 @@ const testEnv: TestEnv = {
 
 export async function initializeMakeSuite(
   palmyToken: MintableErc20,
-  palmyStake: StakedPalmyV2,
+  palmyStake: StakedOasV2,
   incentivesController: StakedTokenIncentivesController,
   pullRewardsIncentivesController: PullRewardsIncentivesController
 ) {

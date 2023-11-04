@@ -8,7 +8,7 @@ import { MintableErc20 } from '../types/MintableErc20';
 import { testDeployIncentivesController } from './helpers/deploy';
 import {
   PullRewardsIncentivesController__factory,
-  StakedPalmyV2__factory,
+  StakedOasV2__factory,
   StakedTokenIncentivesController__factory,
 } from '../types';
 import { parseEther } from '@ethersproject/units';
@@ -90,7 +90,7 @@ const buildTestEnv = async (
     palmyToken,
     incentivesController,
     pullRewardsIncentivesController,
-    palmyStake: StakedPalmyV2__factory.connect(stakeProxy.address, deployer),
+    palmyStake: StakedOasV2__factory.connect(stakeProxy.address, deployer),
   };
 };
 
