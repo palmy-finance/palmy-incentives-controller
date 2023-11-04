@@ -65,8 +65,8 @@ export const getProxyAdminPerNetwork = (network: eNetwork): tEthereumAddress =>
 export const getStakedTokenPerNetwork = (network: eNetwork): tEthereumAddress =>
   getParamPerNetwork<tEthereumAddress>(
     {
-      [eEthereumNetwork.kovan]: 'TODO', // StakedPalmy
-      [eEthereumNetwork.rinkeby]: 'TODO', // StakedPalmy
+      [eEthereumNetwork.kovan]: 'TODO', // StakedOas
+      [eEthereumNetwork.rinkeby]: 'TODO', // StakedOas
       [eOasysNetwork.oasys]: 'TODO', // Proxy-StakedTokenV2Rev3
       [eOasysNetwork.testnet]: 'TODO', // Proxy-StakedTokenV2Rev3
     },
