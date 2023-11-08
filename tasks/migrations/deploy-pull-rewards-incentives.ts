@@ -1,18 +1,7 @@
-import { isAddress } from 'ethers/lib/utils';
 import { task } from 'hardhat/config';
-import {
-  getEmissionManagerPerNetwork,
-  getProxyAdminPerNetwork,
-  getRewardVaultPerNetwork,
-  getStakedTokenPerNetwork,
-  ZERO_ADDRESS,
-} from '../../helpers/constants';
-import {
-  deployPullRewardsIncentivesController,
-  deployInitializableAdminUpgradeabilityProxy,
-} from '../../helpers/contracts-accessors';
-import { notFalsyOrZeroAddress, waitForTx } from '../../helpers/misc-utils';
-import { eNetwork } from '../../helpers/types';
+import { deploy } from '../../helpers/contracts-accessors';
+import { eContractid, eNetwork } from '../../helpers/types';
+import { getFirstSigner, registerContractAddressInJsonDb } from '../../helpers/contracts-helpers';
 
 task(
   `deploy-pull-rewards-incentives`,
@@ -29,59 +18,33 @@ task(
     'proxyAdmin',
     `The address to be added as an Admin role at the Transparent Proxy.`
   )
-  .setAction(
-    async ({ verify, rewardToken, rewardsVault, emissionManager, proxyAdmin }, localBRE) => {
-      await localBRE.run('set-DRE');
+  .setAction(async ({}, localBRE) => {
+    await localBRE.run('set-DRE');
 
-      const networkName = localBRE.network.name as eNetwork;
-      if (!proxyAdmin) proxyAdmin = getProxyAdminPerNetwork(networkName);
-      if (!notFalsyOrZeroAddress(proxyAdmin)) {
-        throw Error('Missing or incorrect admin param');
-      }
-      if (!rewardToken) rewardToken = getStakedTokenPerNetwork(networkName);
-      if (!notFalsyOrZeroAddress(rewardToken)) {
-        throw Error('Missing or incorrect rewardToken param');
-      }
-      if (!rewardsVault) rewardsVault = getRewardVaultPerNetwork(networkName);
-      if (!notFalsyOrZeroAddress(rewardsVault)) {
-        throw Error('Missing or incorrect rewardsVault param');
-      }
-      if (!emissionManager) emissionManager = getEmissionManagerPerNetwork(networkName);
-      if (!notFalsyOrZeroAddress(emissionManager)) {
-        throw Error('Missing or incorrect emissionManager param');
-      }
+    const network = localBRE.network.name as eNetwork;
+    console.log(`[PullRewardsIncentivesController] Starting deployment:`);
 
-      console.log(`[PullRewardsIncentivesController] Starting deployment:`);
-      console.log(`  - Network name: ${networkName}`);
+    const impl = await deploy(eContractid.PullRewardsIncentivesController, network);
+    console.log(
+      `  - Deployed implementation of ${eContractid.PullRewardsIncentivesController}: address - ${impl.contractAddress}`
+    );
+    await registerContractAddressInJsonDb(
+      eContractid.PullRewardsIncentivesController,
+      impl.contractAddress,
+      await (await getFirstSigner()).getAddress()
+    );
+    const proxy = await deploy(eContractid.PullRewardsIncentivesControllerProxy, network);
+    console.log(
+      ` - Deployed proxy of ${eContractid.PullRewardsIncentivesController}: address - ${proxy.contractAddress}`
+    );
+    await registerContractAddressInJsonDb(
+      eContractid.PullRewardsIncentivesControllerProxy,
+      proxy.contractAddress,
+      await (await getFirstSigner()).getAddress()
+    );
 
-      const incentivesControllerImpl = await deployPullRewardsIncentivesController(verify);
-      console.log(`  - Deployed implementation of PullRewardsIncentivesController`);
-
-      const incentivesProxy = await deployInitializableAdminUpgradeabilityProxy(verify);
-      console.log(`  - Deployed proxy of PullRewardsIncentivesController`);
-
-      const encodedParams = incentivesControllerImpl.interface.encodeFunctionData('initialize', [
-        rewardsVault,
-        emissionManager,
-        rewardToken,
-      ]);
-
-      await waitForTx(
-        await incentivesProxy.functions['initialize(address,address,bytes)'](
-          incentivesControllerImpl.address,
-          proxyAdmin,
-          encodedParams
-        )
-      );
-      console.log(`  - Initialized  PullRewardsIncentivesController Proxy`);
-
-      console.log(`  - Finished PullRewardsIncentivesController deployment and initialization`);
-      console.log(`    - Proxy: ${incentivesProxy.address}`);
-      console.log(`    - Impl: ${incentivesControllerImpl.address}`);
-
-      return {
-        proxy: incentivesProxy.address,
-        implementation: incentivesControllerImpl.address,
-      };
-    }
-  );
+    return {
+      proxy: proxy.contractAddress,
+      implementation: impl.contractAddress,
+    };
+  });

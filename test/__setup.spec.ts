@@ -49,7 +49,9 @@ const buildTestEnv = async (
     proxyAdmin,
     palmyToken
   );
-  const { proxy: baseIncentivesProxy } = await DRE.run('deploy-pull-rewards-incentives', {
+  await DRE.run('export-deploy-calldata-incentives', {});
+  const { proxy: baseIncentivesProxy } = await DRE.run('deploy-pull-rewards-incentives', {});
+  await DRE.run('initialize-pull-rewards-incentives', {
     emissionManager: await deployer.getAddress(),
     rewardToken: palmyToken.address,
     rewardsVault: await vaultOfRewards.getAddress(),

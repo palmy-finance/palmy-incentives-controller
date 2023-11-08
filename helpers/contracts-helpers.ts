@@ -1,4 +1,4 @@
-import { Contract, Signer, utils, ethers, BigNumberish } from 'ethers';
+import { Contract, Signer, utils, ethers, BigNumberish, BytesLike } from 'ethers';
 import { signTypedData_v4 } from 'eth-sig-util';
 import { fromRpcSig, ECDSASignature } from 'ethereumjs-util';
 import { getDb, DRE, waitForTx } from './misc-utils';
@@ -15,7 +15,57 @@ import {
 import { Artifact } from 'hardhat/types';
 import { verifyContract } from './etherscan-verification';
 import { usingTenderly } from './tenderly-utils';
+export const registerContractAddressInJsonDb = async (
+  contractId: string,
+  address: string,
+  deployer: string
+) => {
+  const currentNetwork = DRE.network.name;
+  await getDb()
+    .set(`${contractId}.${currentNetwork}`, {
+      address: address,
+      deployer: deployer,
+    })
+    .write();
+};
 
+export const getContractAddress = async (contractId: eContractid) => {
+  const currentNetwork = DRE.network.name;
+  return (await getDb().get(`${contractId}.${currentNetwork}`).value()).address;
+};
+export const saveDeploymentCallData = async (contractId: string, callData: BytesLike) => {
+  const currentNetwork = DRE.network.name;
+  // save calldata into .deployments/calldata/<network>/<contractId>.calldata
+  // directory of this file
+  const path = require('path');
+  const fs = require('fs');
+  const dir = path.join(__dirname, '..', '.deployments', 'calldata', currentNetwork);
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  const fileName = path.join(dir, `${contractId}.calldata`);
+  fs.writeFileSync(fileName, callData);
+};
+
+export const getDeployArgs = async (
+  network: eEthereumNetwork | eOasysNetwork,
+  id: eContractid | string
+) => {
+  switch (id) {
+    default:
+      return [];
+  }
+};
+export const getDeploymentCallData = async (
+  contractName: string,
+  args: any[]
+): Promise<BytesLike> => {
+  const contract = (await DRE.ethers.getContractFactory(contractName)).getDeployTransaction(
+    ...args
+  );
+  return contract.data!;
+};
 export const registerContractInJsonDb = async (contractId: string, contractInstance: Contract) => {
   const currentNetwork = DRE.network.name;
   const MAINNET_FORK = process.env.MAINNET_FORK === 'true';

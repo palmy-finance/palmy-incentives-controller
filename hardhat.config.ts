@@ -11,7 +11,7 @@ require('dotenv').config();
 
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
-import 'temp-hardhat-etherscan';
+import '@nomiclabs/hardhat-etherscan';
 import 'hardhat-gas-reporter';
 import '@typechain/hardhat';
 import '@tenderly/hardhat-tenderly';
@@ -94,7 +94,28 @@ const buidlerConfig: HardhatUserConfig = {
     target: 'ethers-v5',
   },
   etherscan: {
-    apiKey: ETHERSCAN_KEY,
+    apiKey: {
+      testnet: 'N/A',
+      oasys: 'N/A',
+    },
+    customChains: [
+      {
+        chainId: 9372,
+        network: 'testnet',
+        urls: {
+          apiURL: 'https://explorer.testnet.oasys.games/api',
+          browserURL: 'https://explorer.testnet.oasys.games',
+        },
+      },
+      {
+        chainId: 248,
+        network: 'oasys',
+        urls: {
+          apiURL: 'https://explorer.oasys.games/api',
+          browserURL: 'https://explorer.oasys.games',
+        },
+      },
+    ],
   },
   mocha: {
     timeout: 0,
