@@ -12,9 +12,11 @@ export enum eContractid {
   LTokenMock = 'LTokenMock',
   IERC20Detailed = 'IERC20Detailed',
   StakedTokenIncentivesController = 'StakedTokenIncentivesController',
+  StakedTokenIncentivesControllerProxy = 'StakedTokenIncentivesControllerProxy',
   MockSelfDestruct = 'MockSelfDestruct',
   StakedOasV2 = 'StakedOasV2',
   PullRewardsIncentivesController = 'PullRewardsIncentivesController',
+  PullRewardsIncentivesControllerProxy = 'PullRewardsIncentivesControllerProxy',
 }
 
 export enum eEthereumNetwork {

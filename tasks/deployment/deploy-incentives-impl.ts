@@ -1,65 +1,49 @@
 import { task } from 'hardhat/config';
-import { deployInitializableAdminUpgradeabilityProxy, deployStakedTokenIncentivesController } from '../../helpers/contracts-accessors';
+import { deploy } from '../../helpers/contracts-accessors';
 import { getDefenderRelaySigner } from '../../helpers/defender-utils';
-import { waitForTx } from '../../helpers/misc-utils';
 import { eContractid, eNetwork } from '../../helpers/types';
-import { getEmissionManagerPerNetwork, getProxyAdminPerNetwork, getStakedTokenPerNetwork } from '../../helpers/constants';
-import { getFirstSigner } from '../../helpers/contracts-helpers';
+import { getFirstSigner, registerContractAddressInJsonDb } from '../../helpers/contracts-helpers';
 
-task('deploy-incentives-impl', 'Deploy and Initialize the StakedTokenIncentivesController contract')
-  .addFlag('verify', 'Verify contracts deployed in this script at Etherscan.')
-  .addOptionalParam('proxyAdmin', 'Admin address for proxy contracts')
-  .addOptionalParam('stakedToken', 'StakedToken address. ref: StakedTokenIncentivesController')
-  .addOptionalParam('emissionManager', 'EmissionManager address. ref: StakedTokenIncentivesController')
-  .setAction(
-    async ({ verify, proxyAdmin, stakedToken, emissionManager }, localBRE) => {
-      await localBRE.run('set-DRE');
+task(
+  'deploy-incentives-impl',
+  'Deploy and Initialize the StakedTokenIncentivesController contract'
+).setAction(async ({}, localBRE) => {
+  await localBRE.run('set-DRE');
+  const network = localBRE.network.name as eNetwork;
+  // setup deployer
+  let deployer;
+  if (process.env.DEFENDER_API_KEY && process.env.DEFENDER_SECRET_KEY) {
+    const { signer } = await getDefenderRelaySigner();
+    deployer = signer;
+  } else {
+    const [signer] = await localBRE.ethers.getSigners();
+    deployer = signer;
+  }
 
-      // setup deployer
-      let deployer;
-      if (process.env.DEFENDER_API_KEY && process.env.DEFENDER_SECRET_KEY) {
-        const { signer } = await getDefenderRelaySigner();
-        deployer = signer;
-      } else {
-        const [signer] = await localBRE.ethers.getSigners();
-        deployer = signer;
-      }
+  const deployerAddress = await deployer.getAddress();
+  console.log(`deployerAddress ... ${deployerAddress}`);
 
-      const deployerAddress = await deployer.getAddress()
-      console.log(`deployerAddress ... ${deployerAddress}`)
+  const networkName = localBRE.network.name as eNetwork;
+  console.log(`[StakedTokenIncentivesController] Starting deployment:`);
+  console.log(`  - Network name: ${networkName}`);
 
-      const networkName = localBRE.network.name as eNetwork
-      console.log(`[StakedTokenIncentivesController] Starting deployment:`);
-      console.log(`  - Network name: ${networkName}`);
-
-      const impl = await deployStakedTokenIncentivesController(
-        [stakedToken || getStakedTokenPerNetwork(networkName)],
-        verify
-      );
-      console.log(`  - Deployed implementation of ${eContractid.StakedTokenIncentivesController}: address - ${impl.address}`);
-
-      const proxy = await deployInitializableAdminUpgradeabilityProxy(verify);
-      console.log(`  - Deployed proxy of ${eContractid.StakedTokenIncentivesController}: address - ${proxy.address}`);
-      const encodedParams = impl.interface.encodeFunctionData('initialize', [
-        emissionManager || getEmissionManagerPerNetwork(networkName)
-      ]);
-
-      await waitForTx(
-        await proxy.functions['initialize(address,address,bytes)'](
-          impl.address,
-          deployerAddress, // await (await getFirstSigner()).address, // proxyAdmin || getProxyAdminPerNetwork(networkName),
-          encodedParams
-        )
-      );
-      console.log(`  - Initialized ${eContractid.StakedTokenIncentivesController} Proxy`);
-
-      console.log(`  - Finished ${eContractid.StakedTokenIncentivesController} deployment and initialization`);
-      console.log(`    - Proxy: ${proxy.address}`);
-      console.log(`    - Impl: ${impl.address}`);
-
-      return {
-        proxy: proxy.address,
-        implementation: impl.address
-      };
-    }
+  const impl = await deploy(eContractid.StakedTokenIncentivesController, network);
+  console.log(
+    `  - Deployed implementation of ${eContractid.StakedTokenIncentivesController}: address - ${impl.contractAddress}`
   );
+  await registerContractAddressInJsonDb(
+    eContractid.StakedTokenIncentivesController,
+    impl.contractAddress,
+    await (await getFirstSigner()).getAddress()
+  );
+
+  const proxy = await deploy(eContractid.StakedTokenIncentivesControllerProxy, network);
+  console.log(
+    `  - Deployed proxy of ${eContractid.StakedTokenIncentivesController}: address - ${proxy.contractAddress}`
+  );
+  await registerContractAddressInJsonDb(
+    eContractid.StakedTokenIncentivesControllerProxy,
+    proxy.contractAddress,
+    await (await getFirstSigner()).getAddress()
+  );
+});

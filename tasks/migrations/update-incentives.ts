@@ -3,24 +3,12 @@ import { DRE, waitForTx } from '../../helpers/misc-utils';
 import {
   getlTokenAddressPerNetwork,
   getVdTokenAddressPerNetwork,
-  getTokenAddressPerNetwork,
   getIncentivesConfigPerNetwork,
 } from '../../helpers/constants';
 import { eNetwork } from '../../helpers/types';
-import {
-  IPalmyRewardsVault__factory,
-  PullRewardsIncentivesController__factory,
-} from '../../types';
-import {
-  getBlockTimestamp,
-  getEthersSigners,
-  getFirstSigner,
-} from '../../helpers/contracts-helpers';
-import { parseEther } from 'ethers/lib/utils';
-import { BigNumber, Wallet } from 'ethers';
-import { ethers } from 'hardhat';
+import { PullRewardsIncentivesController__factory } from '../../types';
+import { Wallet } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { arrayContainsArray } from 'ethjs-util';
 require('dotenv').config();
 
 task('update-incentives', 'Configure incentives for next 30 days').setAction(

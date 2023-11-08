@@ -56,8 +56,8 @@ export const getProxyAdminPerNetwork = (network: eNetwork): tEthereumAddress =>
     {
       [eEthereumNetwork.kovan]: 'TODO', // Dummy
       [eEthereumNetwork.rinkeby]: 'TODO', // Dummy
-      [eOasysNetwork.oasys]: 'TODO', // Dummy
-      [eOasysNetwork.testnet]: 'TODO', // Dummy
+      [eOasysNetwork.oasys]: '0x21AFfDf04c787EB34f6Eda911d67CbA5D75d7773', // Initial admin
+      [eOasysNetwork.testnet]: '0x21AFfDf04c787EB34f6Eda911d67CbA5D75d7773', // Initial admin
     },
     network
   );
@@ -67,19 +67,8 @@ export const getStakedTokenPerNetwork = (network: eNetwork): tEthereumAddress =>
     {
       [eEthereumNetwork.kovan]: 'TODO', // StakedOas
       [eEthereumNetwork.rinkeby]: 'TODO', // StakedOas
-      [eOasysNetwork.oasys]: 'TODO', // Proxy-StakedTokenV2Rev3
-      [eOasysNetwork.testnet]: 'TODO', // Proxy-StakedTokenV2Rev3
-    },
-    network
-  );
-
-export const getPalmyTokenPerNetwork = (network: eNetwork): tEthereumAddress =>
-  getParamPerNetwork<tEthereumAddress>(
-    {
-      [eEthereumNetwork.kovan]: '',
-      [eEthereumNetwork.rinkeby]: '',
-      [eOasysNetwork.oasys]: 'TODO',
-      [eOasysNetwork.testnet]: 'TODO',
+      [eOasysNetwork.oasys]: 'TODO', // Proxy-StakedOas
+      [eOasysNetwork.testnet]: '0x69c88041fb2F4481185cb7D4e35241A407ff2175', // Proxy-StakedOas
     },
     network
   );
@@ -89,8 +78,19 @@ export const getEmissionManagerPerNetwork = (network: eNetwork): tEthereumAddres
     {
       [eEthereumNetwork.kovan]: 'TODO',
       [eEthereumNetwork.rinkeby]: 'TODO',
-      [eOasysNetwork.oasys]: 'TODO',
-      [eOasysNetwork.testnet]: 'TODO',
+      [eOasysNetwork.oasys]: '0x21AFfDf04c787EB34f6Eda911d67CbA5D75d7773', // Initial admin
+      [eOasysNetwork.testnet]: '0x21AFfDf04c787EB34f6Eda911d67CbA5D75d7773', // Initial admin
+    },
+    network
+  );
+
+export const getRewardTokenPerNetwork = (network: eNetwork): tEthereumAddress =>
+  getParamPerNetwork<tEthereumAddress>(
+    {
+      [eEthereumNetwork.kovan]: 'TODO',
+      [eEthereumNetwork.rinkeby]: 'TODO',
+      [eOasysNetwork.oasys]: '0x5200000000000000000000000000000000000001', // WOAS
+      [eOasysNetwork.testnet]: '0x5200000000000000000000000000000000000001', // WOAS
     },
     network
   );
@@ -101,7 +101,7 @@ export const getRewardVaultPerNetwork = (network: eNetwork): tEthereumAddress =>
       [eEthereumNetwork.kovan]: ZERO_ADDRESS,
       [eEthereumNetwork.rinkeby]: ZERO_ADDRESS,
       [eOasysNetwork.oasys]: 'TODO',
-      [eOasysNetwork.testnet]: 'TODO',
+      [eOasysNetwork.testnet]: '0x7816d413152D44c1bC0cD58A6Fb8a5D2452C6541',
     },
     network
   );
