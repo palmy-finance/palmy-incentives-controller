@@ -20,8 +20,6 @@ import {
   InitializableAdminUpgradeabilityProxy__factory,
   StakedTokenIncentivesController,
   StakedTokenIncentivesController__factory,
-  PullRewardsIncentivesControllerV2__factory,
-  PullRewardsIncentivesControllerV3__factory,
 } from '../types';
 import { DefenderRelaySigner } from 'defender-relay-client/lib/ethers';
 import { Signer } from 'ethers';
@@ -91,36 +89,6 @@ export const exportPullRewardsIncentivesControllerDeploymentCallData = async () 
     id,
     await getDeployArgs(DRE.network.name as eEthereumNetwork | eOasysNetwork, id)
   );
-};
-
-export const deployPullRewardsIncentivesControllerV2 = async (
-  [rewardToken]: [tEthereumAddress],
-  verify?: boolean,
-  signer?: Signer | DefenderRelaySigner
-) => {
-  const instance = await new PullRewardsIncentivesControllerV2__factory(
-    signer || (await getFirstSigner())
-  ).deploy();
-  await instance.deployTransaction.wait();
-  if (verify) {
-    await verifyContract(instance.address, []);
-  }
-  return instance;
-};
-
-export const deployPullRewardsIncentivesControllerV3 = async (
-  [rewardToken]: [tEthereumAddress],
-  verify?: boolean,
-  signer?: Signer | DefenderRelaySigner
-) => {
-  const instance = await new PullRewardsIncentivesControllerV3__factory(
-    signer || (await getFirstSigner())
-  ).deploy();
-  await instance.deployTransaction.wait();
-  if (verify) {
-    await verifyContract(instance.address, []);
-  }
-  return instance;
 };
 
 export const deployInitializableAdminUpgradeabilityProxy = async (verify?: boolean) => {
