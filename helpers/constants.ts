@@ -68,7 +68,7 @@ export const getStakedTokenPerNetwork = (network: eNetwork): tEthereumAddress =>
       [eEthereumNetwork.kovan]: 'TODO', // StakedOas
       [eEthereumNetwork.rinkeby]: 'TODO', // StakedOas
       [eOasysNetwork.oasys]: 'TODO', // Proxy-StakedOas
-      [eOasysNetwork.testnet]: '0x69c88041fb2F4481185cb7D4e35241A407ff2175', // Proxy-StakedOas
+      [eOasysNetwork.testnet]: '0x5ed8FA955719c6f75e11742E60b03DAF4Fe5d698', // Proxy-StakedOas
     },
     network
   );
@@ -101,7 +101,7 @@ export const getRewardVaultPerNetwork = (network: eNetwork): tEthereumAddress =>
       [eEthereumNetwork.kovan]: ZERO_ADDRESS,
       [eEthereumNetwork.rinkeby]: ZERO_ADDRESS,
       [eOasysNetwork.oasys]: 'TODO',
-      [eOasysNetwork.testnet]: '0x7816d413152D44c1bC0cD58A6Fb8a5D2452C6541',
+      [eOasysNetwork.testnet]: '0xaf15E4465402592b48E75D1f9984ec2789ddfa97', // RewardsVaultProxy
     },
     network
   );
