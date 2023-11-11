@@ -2,6 +2,9 @@ import { task } from 'hardhat/config';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
 import { eEthereumNetwork, eOasysNetwork } from '../../helpers/types';
+import { getFirstSigner } from '../../helpers/contracts-helpers';
+import { ZERO_ADDRESS } from '../../helpers/constants';
+import { printContracts } from '../../helpers/misc-utils';
 require('dotenv').config();
 
 task('common-deployment', 'Deployment in for Main, Kovan networks').setAction(
@@ -16,5 +19,6 @@ task('common-deployment', 'Deployment in for Main, Kovan networks').setAction(
     }
     await DRE.run(`deploy-incentives-impl`, {});
     await DRE.run(`deploy-pull-rewards-incentives`, {});
+    printContracts();
   }
 );
