@@ -182,44 +182,6 @@ export const getVdTokenAddressPerNetwork = (network: eNetwork): iAssetBase<tEthe
     },
     network
   );
-export const getTokenAddressPerNetwork = (network: eNetwork): iAssetBase<tEthereumAddress> =>
-  getParamPerNetwork<iAssetBase<tEthereumAddress>>(
-    {
-      [eEthereumNetwork.kovan]: {
-        WETH: ZERO_ADDRESS,
-        PLMY: ZERO_ADDRESS,
-        WBTC: ZERO_ADDRESS,
-        WOAS: ZERO_ADDRESS,
-        USDC: ZERO_ADDRESS,
-        USDT: ZERO_ADDRESS,
-      },
-      [eEthereumNetwork.rinkeby]: {
-        WETH: ZERO_ADDRESS,
-        PLMY: ZERO_ADDRESS,
-        WBTC: ZERO_ADDRESS,
-        WOAS: ZERO_ADDRESS,
-        USDC: ZERO_ADDRESS,
-        USDT: ZERO_ADDRESS,
-      },
-      [eOasysNetwork.oasys]: {
-        WETH: 'TODO',
-        PLMY: 'TODO',
-        WBTC: 'TODO',
-        WOAS: 'TODO',
-        USDC: 'TODO',
-        USDT: 'TODO',
-      },
-      [eOasysNetwork.testnet]: {
-        WETH: 'TODO',
-        PLMY: 'TODO',
-        WBTC: 'TODO',
-        WOAS: 'TODO',
-        USDC: 'TODO',
-        USDT: 'TODO',
-      },
-    },
-    network
-  );
 
 export const getIncentivesConfigPerNetwork = (network: eNetwork): incentivesConfig =>
   getParamPerNetwork<incentivesConfig>(
