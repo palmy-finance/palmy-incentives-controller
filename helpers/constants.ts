@@ -78,8 +78,8 @@ export const getEmissionManagerPerNetwork = (network: eNetwork): tEthereumAddres
     {
       [eEthereumNetwork.kovan]: 'TODO',
       [eEthereumNetwork.rinkeby]: 'TODO',
-      [eOasysNetwork.oasys]: '0x21AFfDf04c787EB34f6Eda911d67CbA5D75d7773', // Initial admin
-      [eOasysNetwork.testnet]: '0x21AFfDf04c787EB34f6Eda911d67CbA5D75d7773', // Initial admin
+      [eOasysNetwork.oasys]: '0xf85e58B1c32EEcCfdc48A31D991C265e87681CED', // Initial admin
+      [eOasysNetwork.testnet]: '0xf85e58B1c32EEcCfdc48A31D991C265e87681CED', // Initial admin
     },
     network
   );
@@ -134,12 +134,12 @@ export const getlTokenAddressPerNetwork = (network: eNetwork): iAssetBase<tEther
         USDT: 'TODO',
       },
       [eOasysNetwork.testnet]: {
-        WETH: 'TODO',
+        WETH: '0xd152840f689d5049ab236af8cd52002B395D8Fde',
         PLMY: 'TODO',
-        WBTC: 'TODO',
-        WOAS: 'TODO',
-        USDC: 'TODO',
-        USDT: 'TODO',
+        WBTC: '0x89910B4E8904AA39f4F347334Bb6252Fb5982BaA',
+        WOAS: '0x483a6AF5c662B2a60d967f8F1Ccf5Ea55e300e30',
+        USDC: '0xDf146c733913cd765Fa3CEB44FDc826e55b2Aa79',
+        USDT: '0x8e5CAD32Ea669640FCB94476b7bD620497Fc8bdf',
       },
     },
     network
@@ -172,12 +172,12 @@ export const getVdTokenAddressPerNetwork = (network: eNetwork): iAssetBase<tEthe
         USDT: 'TODO',
       },
       [eOasysNetwork.testnet]: {
-        WETH: 'TODO',
+        WETH: '0x1Bc11e591DecE76d58DE002cAF7C3988f0DeDD02',
         PLMY: 'TODO',
-        WBTC: 'TODO',
-        WOAS: 'TODO',
-        USDC: 'TODO',
-        USDT: 'TODO',
+        WBTC: '0xc19e7C43B2dBc3601c80973026f4Cd03e1BCa1Dd',
+        WOAS: '0xb9AD3a3f87a471D7f3062838f0217158a295ee53',
+        USDC: '0x7B5a75F8Cc2efE6e1b55f330dd2ABc7aa6F36038',
+        USDT: '0x503e95f991aA9C673F2C939943825261f3b52fb9',
       },
     },
     network
@@ -214,13 +214,13 @@ export const getIncentivesConfigPerNetwork = (network: eNetwork): incentivesConf
         palmyToken: 'TODO',
       },
       [eOasysNetwork.testnet]: {
-        addressProvider: 'TODO',
-        rewardsVault: 'TODO',
-        incentiveControllerImpl: 'TODO',
-        incentiveControllerProxy: 'TODO',
-        lendingPool: 'TODO',
-        poolConfigurator: 'TODO',
-        palmyToken: 'TODO',
+        addressProvider: '0x30F20C93f4Ee20eEd65836485C3e0c2Eb6271be6',
+        rewardsVault: '0xaf15E4465402592b48E75D1f9984ec2789ddfa97',
+        incentiveControllerImpl: '0xfaa65742467BAA33398900bB62B14FE09e17919e',
+        incentiveControllerProxy: '0xF9989396817007b7Bb9290f0885821D8798c79e1',
+        lendingPool: '0x960E892f70c494C8c33D7eF0C86501A396E55b38',
+        poolConfigurator: '0x270A56B6c640C17230AC907ca804e66fF4F79d66',
+        palmyToken: '0x9a76Fd958Ba7D94615BEebbD91402F2e6D3F4D2b',
       },
     },
     network

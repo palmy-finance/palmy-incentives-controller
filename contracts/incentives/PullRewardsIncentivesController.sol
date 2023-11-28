@@ -29,6 +29,8 @@ contract PullRewardsIncentivesController is BaseIncentivesController {
     address rewardToken
   ) external initializer {
     require(emissionManager != address(0), 'INVALID_EMISSION_MANAGER');
+    require(rewardsVault != address(0), 'INVALID_REWARDS_VAULT');
+    require(rewardToken != address(0), 'INVALID_REWARD_TOKEN');
     _rewardsVault = rewardsVault;
     _emissionManager = emissionManager;
     super.initialize(rewardToken);
@@ -48,6 +50,7 @@ contract PullRewardsIncentivesController is BaseIncentivesController {
    * @param rewardsVault The address of the rewards vault
    **/
   function setRewardsVault(address rewardsVault) external onlyEmissionManager {
+    require(rewardsVault != address(0), 'INVALID_REWARDS_VAULT');
     _rewardsVault = rewardsVault;
     emit RewardsVaultUpdated(rewardsVault);
   }

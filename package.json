@@ -35,7 +35,9 @@
     "oasys:verification": "npm run hardhat:oasys -- verification",
     "testnet:verification": "npm run hardhat:testnet -- verification",
     "print-configs:oasys": "npm run hardhat:oasys -- print-configs",
-    "print-configs:testnet": "npm run hardhat:testnet -- print-configs"
+    "print-configs:testnet": "npm run hardhat:testnet -- print-configs",
+    "testnet:update-incentives": "npm run hardhat:testnet -- update-incentives",
+    "oasys:update-incentives": "npm run hardhat:oasys -- update-incentives"
   },
   "repository": {
     "type": "git",
