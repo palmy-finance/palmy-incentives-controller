@@ -24,14 +24,11 @@ export const getOasysDeploymentAddress = async (contractId: string, callData: By
     PERMISSIONED_CONTRACT_FACTORY_ADDRESS,
     DRE.ethers.provider
   );
-  return await instance.getDeploymentAddress(callData, toBytes32(contractId));
+  return await instance.getDeploymentAddress(callData, toSalt(contractId));
 };
 
-const toBytes32 = (value: string) => {
-  if (value.length > 32) {
-    return utils.formatBytes32String(value.substring(0, 32 / 2));
-  }
-  return utils.formatBytes32String(value);
+const toSalt = (contractId: string) => {
+  return utils.hexlify(utils.sha256(utils.toUtf8Bytes(contractId)));
 };
 
 export const registerContractAddressInJsonDb = async (
@@ -70,7 +67,7 @@ export const saveDeploymentCallData = async (contractId: string, callData: Bytes
       contractId,
       await getOasysDeploymentAddress(contractId, callData),
       '',
-      toBytes32(contractId)
+      toSalt(contractId)
     );
   }
 };
