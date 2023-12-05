@@ -15,6 +15,25 @@ import {
 import { Artifact } from 'hardhat/types';
 import { verifyContract } from './etherscan-verification';
 import { usingTenderly } from './tenderly-utils';
+import { IPermissionedContractFactory__factory } from '../types/factories/IPermissionedContractFactory__factory';
+import { PERMISSIONED_CONTRACT_FACTORY_ADDRESS } from './constants';
+
+export const getOasysDeploymentAddress = async (contractId: string, callData: BytesLike) => {
+  // Calculate the length of calldata in hex, padding to 64 characters
+  const instance = IPermissionedContractFactory__factory.connect(
+    PERMISSIONED_CONTRACT_FACTORY_ADDRESS,
+    DRE.ethers.provider
+  );
+  return await instance.getDeploymentAddress(callData, toBytes32(contractId));
+};
+
+const toBytes32 = (value: string) => {
+  if (value.length > 32) {
+    return utils.formatBytes32String(value.substring(0, 32 / 2));
+  }
+  return utils.formatBytes32String(value);
+};
+
 export const registerContractAddressInJsonDb = async (
   contractId: string,
   address: string,
@@ -46,6 +65,29 @@ export const saveDeploymentCallData = async (contractId: string, callData: Bytes
   }
   const fileName = path.join(dir, `${contractId}.calldata`);
   fs.writeFileSync(fileName, callData);
+  if ((currentNetwork as eEthereumNetwork | eOasysNetwork) == eOasysNetwork.oasys) {
+    await registerContractAddressAndSaltInJsonDb(
+      contractId,
+      await getOasysDeploymentAddress(contractId, callData),
+      '',
+      toBytes32(contractId)
+    );
+  }
+};
+const registerContractAddressAndSaltInJsonDb = async (
+  contractId: string,
+  address: string,
+  deployer: string,
+  salt: string
+) => {
+  const currentNetwork = DRE.network.name;
+  await getDb()
+    .set(`${contractId}.${currentNetwork}`, {
+      address: address,
+      deployer: deployer,
+      salt: salt,
+    })
+    .write();
 };
 
 export const getDeployArgs = async (
