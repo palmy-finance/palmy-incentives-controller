@@ -10,6 +10,7 @@ import {
   iAssetBase,
   incentivesConfig,
 } from './types';
+export const PERMISSIONED_CONTRACT_FACTORY_ADDRESS = '0x123e3ae459a8D049F27Ba62B8a5D48c68A100EBC';
 
 // ----------------
 // MATH
