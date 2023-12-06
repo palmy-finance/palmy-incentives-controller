@@ -206,13 +206,13 @@ export const getIncentivesConfigPerNetwork = (network: eNetwork): incentivesConf
         palmyToken: ZERO_ADDRESS,
       },
       [eOasysNetwork.oasys]: {
-        addressProvider: 'TODO',
-        rewardsVault: 'TODO',
-        incentiveControllerImpl: 'TODO',
-        incentiveControllerProxy: 'TODO',
+        addressProvider: '0xab59eb1948d5f233067DE4Dd596E41c5FD149032',
+        rewardsVault: '0x2C28D949E3249C90c5A3DEF66cf5f03f10e86739',
+        incentiveControllerImpl: '0x349dcCC152F31480044b8182B7c351B20a39f9AF',
+        incentiveControllerProxy: '0x00B0Bb2936aE698C2580f7044C4d8b49ac21DA62',
         lendingPool: 'TODO',
         poolConfigurator: 'TODO',
-        palmyToken: 'TODO',
+        palmyToken: '0x4Fac9078B4aED3A47DAC2667f31bdd7d3c27d6cd',
       },
       [eOasysNetwork.testnet]: {
         addressProvider: '0x30F20C93f4Ee20eEd65836485C3e0c2Eb6271be6',
