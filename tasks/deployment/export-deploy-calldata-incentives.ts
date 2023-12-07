@@ -1,7 +1,7 @@
 import { task } from 'hardhat/config';
 
 import { eOasysNetwork, eContractid, eEthereumNetwork } from '../../helpers/types';
-import { saveDeploymentCallData } from '../../helpers/contracts-helpers';
+import { getFirstSigner, saveDeploymentCallData } from '../../helpers/contracts-helpers';
 import {
   exportInitializableAdminUpgradeabilityProxyDeploymentCallData,
   exportPullRewardsIncentivesControllerDeploymentCallData,
