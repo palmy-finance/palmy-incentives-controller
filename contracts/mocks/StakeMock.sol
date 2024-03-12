@@ -11,7 +11,10 @@ contract StakeMock is IStakedTokenWithConfig {
   }
 
   function stake(address to, uint256 amount) external override {
-      IERC20(STAKED_TOKEN).transferFrom(msg.sender, address(this), amount);
+    require(
+      IERC20(STAKED_TOKEN).transferFrom(msg.sender, address(this), amount),
+      'STAKE_TRANSFER_IN_FAILED'
+    );
   }
 
   function redeem(address to, uint256 amount) external override {}
