@@ -28,7 +28,7 @@ export const getOasysDeploymentAddress = async (contractId: string, callData: By
 };
 
 const toSalt = (contractId: string) => {
-  return utils.hexlify(utils.sha256(utils.toUtf8Bytes(contractId)));
+  return utils.hexlify(utils.sha256(utils.toUtf8Bytes(contractId + 'palmy-finance')));
 };
 
 export const registerContractAddressInJsonDb = async (
